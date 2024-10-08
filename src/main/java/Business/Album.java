@@ -2,7 +2,7 @@ package Business;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author: Dmytro Drahan
@@ -11,13 +11,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
 @Builder
 public class Album {
 
     private Integer albumId;
     private String title;
     private Integer artistId;
-    private LocalDateTime releaseDate;
+    private Date releaseDate;
 
+    @Override
+    public String toString() {
+        return
+                "Id=" + albumId +
+                ", title='" + title + '\'' +
+                ", artistId=" + artistId +
+                ", Release date=" + releaseDate;
+    }
 }
