@@ -1,14 +1,18 @@
 package Business;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+
+/**
+ * @author: Dmytro Drahan
+ */
 
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
+@Builder
 public class Album {
 
     private Integer albumId;
