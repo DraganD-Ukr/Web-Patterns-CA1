@@ -12,10 +12,10 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 public class Album {
 
-    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Exclude
     private Integer albumId;
     private String title;
     private Integer artistId;
