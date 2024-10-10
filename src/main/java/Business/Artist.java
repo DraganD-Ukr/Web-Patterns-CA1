@@ -10,9 +10,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class Artist {
 
     private Integer artistId;
+    @EqualsAndHashCode.Exclude
     private String name;
 
     @Override
@@ -21,5 +23,7 @@ public class Artist {
                 "Id=" + artistId +
                 ", Name=" + name + '\'';
     }
+
+
 
 }
