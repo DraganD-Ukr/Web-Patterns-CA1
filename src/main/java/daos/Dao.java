@@ -33,21 +33,6 @@ public class Dao {
     }
 
     /**
-     * Helper method to close the connection after database operation
-     * @param con - Connection object to be closed
-     */
-    public void freeConnection(Connection con){
-        try {
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to free connection: " + e.getMessage());
-            System.exit(1);
-        }
-    }
-
-    /**
      * Helper method to close resources after database operation
      * @param rs - ResultSet object to be closed
      * @param ps - PreparedStatement object to be closed
@@ -62,7 +47,7 @@ public class Dao {
                 ps.close();
             }
             if (con != null) {
-                freeConnection(con);
+                con.close();
             }
         } catch (SQLException e) {
             System.out.println("Exception occurred while closing resources: " + e.getMessage());
