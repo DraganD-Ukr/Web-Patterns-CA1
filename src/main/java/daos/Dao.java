@@ -1,17 +1,19 @@
 package daos;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Dao {
+
     private final String databaseName;
 
     public Dao(String databaseName){
         this.databaseName = databaseName;
     }
 
-
+    /**
+     * Helper method to get connection to the database
+     * @return Connection object
+     */
     public Connection getConnection(){
         String driver = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/" + databaseName;
@@ -30,15 +32,25 @@ public class Dao {
         return con;
     }
 
-    public void freeConnection(Connection con){
+    /**
+     * Helper method to close resources after database operation
+     * @param rs - ResultSet object to be closed
+     * @param ps - PreparedStatement object to be closed
+     * @param con - Connection object to be closed
+     */
+    public void closeResources(ResultSet rs, PreparedStatement ps, Connection con) {
         try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
             if (con != null) {
                 con.close();
-                con = null;
             }
         } catch (SQLException e) {
-            System.out.println("Failed to free connection: " + e.getMessage());
-            System.exit(1);
+            System.out.println("Exception occurred while closing resources: " + e.getMessage());
         }
     }
 
