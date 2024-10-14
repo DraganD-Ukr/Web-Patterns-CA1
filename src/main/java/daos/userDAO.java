@@ -1,6 +1,6 @@
 package daos;
 
-public interface userDAO {
+public interface UserDAO {
 
 
     

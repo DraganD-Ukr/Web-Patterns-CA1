@@ -1,6 +1,6 @@
 package daos;
 
-public class userDAOimpl {
+public class UserDAOimpl {
 
 
 
