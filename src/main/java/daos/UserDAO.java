@@ -1,15 +1,17 @@
 package daos;
 import Business.User;
 
-import java.util.List;
+/**
+ * @Author: Jo Art Mahilaga
+ */
 
-public interface userDAO {
+public interface UserDAO {
 
     boolean addUser(User user);
 
     String getPasswordByUserName(String userName);
 
-    User getUserByID(String userName);
+    User getUserByName(String userName);
 
     boolean deleteUser(User user);
 

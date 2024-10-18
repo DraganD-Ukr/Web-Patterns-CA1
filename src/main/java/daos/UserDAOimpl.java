@@ -1,16 +1,19 @@
 package daos;
 
 import Business.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class userDAOimpl extends Dao implements userDAO {
+/**
+ * @Author: Jo Art Mahilaga
+ */
 
-    public userDAOimpl(String databaseName) {
+public class UserDAOimpl extends Dao implements UserDAO {
+
+    public UserDAOimpl(String databaseName) {
         super(databaseName);
     }
 
@@ -50,17 +53,42 @@ public class userDAOimpl extends Dao implements userDAO {
 
     @Override
     public String getPasswordByUserName(String userName) {
-        return "";
-    }
-
-
-    @Override
-    public User getUserByID(String userName) {
-        User user = null;
+        String password = null;
 
         if (userName == null) {
             return null;
         }
+
+        try (Connection con = getConnection();
+
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
+
+            ps.setString(1, userName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if(rs.next()){
+                    password = rs.getString("password");
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": An SQLException occurred in the getUserByID() method.\nError: " + e.getMessage());
+            e.printStackTrace();
+
+
+        } catch (NullPointerException e) {
+            System.out.println(LocalDateTime.now() + ": A NullPointerException occurred in the getUserByID() method.\nError: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return password;
+    }
+
+
+    @Override
+    public User getUserByName(String userName) {
+        User user = null;
+
 
         try (Connection con = getConnection();
 
@@ -95,15 +123,15 @@ public class userDAOimpl extends Dao implements userDAO {
     @Override
     public boolean deleteUser(User user) {
 
-        if (user == null || user.getUserID() <= 0) {
+        if (user == null) {
             return false;
         }
 
         try (Connection con = super.getConnection();
 
-             PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userID = ?")) {
+             PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
 
-            ps.setInt(1, user.getUserID());
+            ps.setString(1, user.getUserName());
 
             int rowsAffected = ps.executeUpdate();
 

@@ -2,10 +2,15 @@ package Business;
 
 import lombok.*;
 
+/**
+ * @Author: Jo Art Mahilaga
+ */
+
 @Getter
 @Setter
 @AllArgsConstructor
 @ToString
+@Builder
 @EqualsAndHashCode
 public class User {
 
@@ -16,5 +21,8 @@ public class User {
     private String userName;
     private String password; //hashed password
     private int userID;
+
+
+
 
 }
