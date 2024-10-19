@@ -18,7 +18,7 @@ import java.time.LocalTime;
 @ToString
 @AllArgsConstructor
 @EqualsAndHashCode
-
+@Builder
 public class Song {
     @NonNull
     private int songID;
@@ -33,4 +33,10 @@ public class Song {
     private double averageRating;
     private int ratingsSum;
 
+    public Song(String title, int albumID, int artistID, LocalTime length) {
+        this.title = title;
+        this.albumID = albumID;
+        this.artistID = artistID;
+        this.length = length;
+    }
 }

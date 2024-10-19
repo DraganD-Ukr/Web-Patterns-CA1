@@ -9,7 +9,7 @@ public interface SongDAO {
     public List<Song> findSongsFromArtist(String artist);
     public List<Song> findSongsFromAlbumByName(String albumName);
     public List<Song> findSongsFromAlbumById(int albumId);
-    public boolean addSong(String title, int artistId, int albumId, LocalTime Length, int ratingCount, double ratingAverage, int ratingSum);
+    public boolean addSong(Song song);
     public boolean deleteSong(int id);
 
 }

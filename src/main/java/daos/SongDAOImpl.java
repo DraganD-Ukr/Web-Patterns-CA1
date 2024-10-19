@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDAOImpl extends Dao implements SongDAO{
+
     public SongDAOImpl(String databaseName){
         super(databaseName);
     }
@@ -52,7 +53,7 @@ public class SongDAOImpl extends Dao implements SongDAO{
         List<Song> songList = new ArrayList<Song>();
 
         Connection con = super.getConnection();
-        String sql = "SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.averageRating " +
+        String sql = "SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount ,s.averageRating,s.ratingsSum " +
                 "FROM Songs s " +
                 "JOIN Artists a ON s.artistID = a.artistID " +
                 "WHERE a.name = ?";
@@ -158,19 +159,19 @@ public class SongDAOImpl extends Dao implements SongDAO{
     }
 
     @Override
-    public boolean addSong(String title, int artistId, int albumId, LocalTime Length, int ratingCount, double ratingAverage, int ratingSum) {
+    public boolean addSong(Song song) {
         Connection con = super.getConnection();
         String sql = "INSERT INTO Songs (title, artistID, albumID, length, ratingCount, averageRating, ratingsSum) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, title);
-            ps.setInt(2, artistId);
-            ps.setInt(3, albumId);
-            ps.setTime(4, Time.valueOf(Length));
-            ps.setInt(5, ratingCount);
-            ps.setDouble(6, ratingAverage);
-            ps.setInt(7, ratingSum);
+            ps.setString(1, song.getTitle());
+            ps.setInt(2, song.getArtistID());
+            ps.setInt(3, song.getAlbumID());
+            ps.setTime(4, Time.valueOf(song.getLength()));
+            ps.setInt(5, song.getRatingCount());
+            ps.setDouble(6, song.getAverageRating());
+            ps.setInt(7, song.getRatingsSum());
 
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0; // returns true if the song was added successfully
