@@ -20,14 +20,9 @@ public class UserDAOimpl extends Dao implements UserDAO {
     @Override
     public boolean addUser(User user) {
 
-        if (user == null || user.getUserName() == null || user.getPassword() == null) {
-            return false;
-        }
-
         Connection conn = super.getConnection();
 
-        try (
-                PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
 
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
@@ -87,6 +82,11 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
     @Override
     public User getUserByName(String userName) {
+
+        if (userName == null) {
+            return null;
+        }
+
         User user = null;
 
         Connection con = super.getConnection();
