@@ -37,7 +37,7 @@ CREATE TABLE Songs (
    artistID INT NOT NULL,
    length TIME NOT NULL,
    ratingCount INT NOT NULL DEFAULT 0,
-   averageRating DECIMAL(3, 2) CHECK (averageRating >= 1 AND averageRating <= 5) DEFAULT NULL,
+   averageRating DECIMAL(3, 2) CHECK (averageRating >= 0 AND averageRating <= 5) DEFAULT 0,
    ratingsSum INT DEFAULT 0,
    FOREIGN KEY (albumID) REFERENCES Albums(albumID),
    FOREIGN KEY (artistID) REFERENCES Artists(artistID)

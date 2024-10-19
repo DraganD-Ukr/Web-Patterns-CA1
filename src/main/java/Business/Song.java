@@ -28,6 +28,7 @@ public class Song {
     private int albumID;
     @NonNull
     private int artistID;
+    @NonNull
     private LocalTime length;
     private int ratingCount;
     private double averageRating;
