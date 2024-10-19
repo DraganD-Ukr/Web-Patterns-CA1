@@ -18,7 +18,9 @@ public class User {
     private String firstName;
     @NonNull
     private String lastName;
+    @NonNull
     private String userName;
+    @NonNull
     private String password; //hashed password
     private int userID;
 
