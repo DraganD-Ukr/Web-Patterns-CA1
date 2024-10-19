@@ -33,6 +33,13 @@ public class Song {
     private double averageRating;
     private int ratingsSum;
 
+    /**
+     * Constructor for creating a song object
+     * @param title The title of the song
+     * @param albumID The id of the album the song is in
+     * @param artistID The id of the artist who created the song
+     * @param length The length of the song
+     */
     public Song(String title, int albumID, int artistID, LocalTime length) {
         this.title = title;
         this.albumID = albumID;

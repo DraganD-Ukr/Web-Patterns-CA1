@@ -8,6 +8,11 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Song DAO implementation class used to interact with the database
+ *
+ * @author Aloysius Wilfred Pacheco D00253302
+ */
 public class SongDAOImpl extends Dao implements SongDAO{
 
     public SongDAOImpl(String databaseName){
@@ -19,6 +24,8 @@ public class SongDAOImpl extends Dao implements SongDAO{
     public Song findSongByTitle(String title) {
         Song song = null;
         Connection con = super.getConnection();
+
+        // SQL query to get the song by its title
         String sql = "SELECT songID, title, albumID, artistID, length, ratingCount, averageRating, ratingsSum " +
                 "FROM Songs WHERE title = ?";
 
@@ -174,7 +181,7 @@ public class SongDAOImpl extends Dao implements SongDAO{
             ps.setInt(7, song.getRatingsSum());
 
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0; // returns true if the song was added successfully
+            return rowsAffected > 0; // returns true if the song was added successfully(1 row was affected)
         } catch (SQLException e) {
             System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
             e.printStackTrace();
@@ -190,7 +197,7 @@ public class SongDAOImpl extends Dao implements SongDAO{
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0; // Returns true if the song was deleted successfully
+        return rowsAffected > 0; // Returns true if the song was deleted successfully(1 row was affected)
         } catch (SQLException e) {
             System.out.println(LocalDateTime.now() + ": SQLException occurred while deleting the song.");
             e.printStackTrace();

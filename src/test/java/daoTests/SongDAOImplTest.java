@@ -12,6 +12,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Song DAO implementation test class used to test the methods in the SongDAOImpl class
+ *
+ * @author Aloysius Wilfred Pacheco D00253302
+ */
+
 class SongDAOImplTest {
     private static SongDAO testSongDao;
     private static Song testSongToaddToDatabase, testSongToDeleteFromDatabase;
