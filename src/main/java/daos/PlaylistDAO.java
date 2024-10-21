@@ -9,7 +9,7 @@ public interface PlaylistDAO {
 
     boolean createPlaylist(Playlist playlist);
 
-    boolean deletePlaylist(int playlistId);
+    boolean deletePlaylistByID(int playlistId);
 
     boolean addSongToPlaylist(int playlistId, int songId);
 

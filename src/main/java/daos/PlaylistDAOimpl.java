@@ -1,6 +1,5 @@
 package daos;
 
-import Business.Album;
 import Business.Playlist;
 import Business.Song;
 
@@ -8,6 +7,14 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+
+/**
+ * Playlist DAO implementation class used to interact with the database
+ *
+ * @Author: Dmytro Drahan
+ * @Author: Aloysius Wilfred Pacheco D00253302
+ */
 
 public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
@@ -39,8 +46,26 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     }
 
     @Override
-    public boolean deletePlaylist(int playlistId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean deletePlaylistByID(int playlistId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        String query = "DELETE FROM Playlists WHERE playlistID = ?";
+
+        try {
+            con = super.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, playlistId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override
@@ -69,7 +94,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        Song song;
+        Song s;
         List<Song> result = new ArrayList<>();
 
 
@@ -88,7 +113,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
             while (rs.next()) {
 
-                Song s = Song.builder()
+                s = Song.builder()
                         .songID(rs.getInt("songID"))
                         .title(rs.getString("title"))
                         .albumID(rs.getInt("albumID"))
