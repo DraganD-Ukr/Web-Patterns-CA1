@@ -3,6 +3,8 @@ package daos;
 import Business.Playlist;
 import Business.Song;
 
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
@@ -13,7 +15,25 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
     @Override
     public boolean createPlaylist(Playlist playlist) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+            Connection con = super.getConnection();
+
+            String query = "INSERT INTO Playlists (userID, name, isPublic) VALUES (?, ?, ?)";
+
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, playlist.getUserId());
+                ps.setString(2, playlist.getName());
+                ps.setBoolean(3, playlist.isPublic());
+
+                int rowsAffected = ps.executeUpdate();
+                return rowsAffected > 0;
+
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
+                e.printStackTrace();
+            }
+
+        return false;
     }
 
     @Override
