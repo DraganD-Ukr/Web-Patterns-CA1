@@ -68,19 +68,61 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         return false;
     }
 
+    //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean addSongToPlaylist(int playlistId, int songId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Connection con = super.getConnection();
+
+        String query = "INSERT INTO PlaylistSongs (playlistID, songID) VALUES (?, ?)";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, playlistId);
+            ps.setInt(2, songId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean removeSongFromPlaylist(int playlistId, int songId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Connection con = super.getConnection();
+
+        String query = "DELETE FROM PlaylistSongs WHERE playlistID = ? AND songID = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, playlistId);
+            ps.setInt(2, songId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while removing the song.");
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean renamePlaylist(int playlistId, String newName) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Connection con = super.getConnection();
+
+        String sql = "UPDATE Playlists SET name = ? WHERE playlistID = ?";
+        try(PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, newName);
+            ps.setInt(2, playlistId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while renaming the song.");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
