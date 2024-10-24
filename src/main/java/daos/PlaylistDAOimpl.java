@@ -111,8 +111,8 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     public boolean renamePlaylist(int playlistId, String newName) {
         Connection con = super.getConnection();
 
-        String sql = "UPDATE Playlists SET name = ? WHERE playlistID = ?";
-        try(PreparedStatement ps = con.prepareStatement(sql)) {
+        String querry = "UPDATE Playlists SET name = ? WHERE playlistID = ?";
+        try(PreparedStatement ps = con.prepareStatement(querry)) {
             ps.setString(1, newName);
             ps.setInt(2, playlistId);
 
@@ -125,9 +125,37 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         }
     }
 
+    //Done by Aloysius Wilfred Pacheco D00253302
+    //This method only Displays logged User Playlists and public playlists
     @Override
     public List<Playlist> getPlaylists(int playlistId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        List<Playlist> playlists = new ArrayList<>();
+        Connection con = super.getConnection();
+
+        String querry = "SELECT * FROM Playlists WHERE userID = ? OR isPublic = 1";
+
+        try(PreparedStatement ps = con.prepareStatement(querry)) {
+            ps.setInt(1, playlistId);
+            try(ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    playlists.add(Playlist.builder()
+                            .playlistId(rs.getInt("playlistID"))
+                            .userId(rs.getInt("userID"))
+                            .name(rs.getString("name"))
+                            .isPublic(rs.getBoolean("isPublic"))
+                            .build());
+                }
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while running the query.");
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing the SQL query");
+            e.printStackTrace();
+        }
+
+        return playlists;
     }
 
     @Override
