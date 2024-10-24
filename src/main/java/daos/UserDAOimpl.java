@@ -1,6 +1,7 @@
 package daos;
 
 import Business.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +20,10 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
     @Override
     public boolean addUser(User user) {
+
+        if (user == null) {
+            return false;
+        }
 
         Connection conn = super.getConnection();
 
@@ -61,7 +66,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if(rs.next()){
+                if (rs.next()) {
                     password = rs.getString("password");
                 }
 
@@ -128,7 +133,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
         Connection con = super.getConnection();
 
-        try ( PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
+        try (PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
 
             ps.setString(1, user.getUserName());
 
@@ -146,5 +151,30 @@ public class UserDAOimpl extends Dao implements UserDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    @Override
+    public boolean existsbyUserName(String userName) {
+        if (userName == null) {
+            return false;
+        }
+
+        String query = "SELECT COUNT(*) FROM Users WHERE userName = ?";
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, userName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": An SQLException occurred while checking if user exists.\nError: " + e.getMessage());
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println(LocalDateTime.now() + ": A NullPointerException occurred while checking if user exists.\nError: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }

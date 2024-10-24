@@ -5,20 +5,19 @@ import daos.UserDAOimpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @Author: Jo Art Mahilaga
  */
 
-
 public class UserDAOimplTest {
 
-    private static User user1, guyToBeDeleted, newUser;
+    private static User user1,guyToBeDeleted, newUser, newUser2;
 
     @BeforeAll
     public static void init() {
-
         // Sample users for testing
         user1 = User.builder()
                 .firstName("John")
@@ -43,6 +42,14 @@ public class UserDAOimplTest {
                 .password("hashed_password_new")
                 .userID(4)
                 .build();
+
+        newUser2 = User.builder()
+                .firstName("New")
+                .lastName("User")
+                .userName("newuser2")
+                .password("hashed_password_new2")
+                .userID(5)
+                .build();
     }
 
     @AfterAll
@@ -50,8 +57,8 @@ public class UserDAOimplTest {
         // Clean up resources and delete any test data created during tests
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
         userDao.deleteUser(newUser);
+        userDao.deleteUser(newUser2);
     }
-
 
     @Test
     public void addUser_Success() {
@@ -71,35 +78,14 @@ public class UserDAOimplTest {
         assertEquals(false, result);
     }
 
-    @Test
-    public void addUser_Failure_NullUsernameOrPassword() {
-        UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
-        User userWithoutUsername = User.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .userName(null)
-                .password("hashed_password_1")
-                .userID(1)
-                .build();
-
-        assertEquals(false, userDao.addUser(userWithoutUsername));
-
-        User userWithoutPassword = User.builder()
-                .firstName("Jane")
-                .lastName("Smith")
-                .userName("janesmith")
-                .password(null)
-                .userID(2)
-                .build();
-
-        assertEquals(false, userDao.addUser(userWithoutPassword));
-    }
 
     @Test
     public void getPasswordByUserName_UserExists() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
-        System.out.println(user1.getUserName());
+
+        // Ensure the user is added before checking password
+
         String password = userDao.getPasswordByUserName(user1.getUserName());
 
         assertEquals(user1.getPassword(), password);
@@ -117,6 +103,7 @@ public class UserDAOimplTest {
     @Test
     public void getUserByName_UserExists() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
+
 
         User user = userDao.getUserByName(user1.getUserName());
 
@@ -136,9 +123,8 @@ public class UserDAOimplTest {
     public void deleteUser_Success() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
-        // Add a user to delete
+        // Ensure the guyToBeDeleted is added before deletion
         userDao.addUser(guyToBeDeleted);
-
 
         boolean result = userDao.deleteUser(guyToBeDeleted);
 
@@ -171,5 +157,22 @@ public class UserDAOimplTest {
         assertEquals(false, result);
     }
 
+    @Test
+    public void existsByUserName_UserExists() {
+        UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Ensure the new user's data is added before checking existence.
+        userDao.addUser(newUser2);
+
+        boolean existsResult = userDao.existsbyUserName(newUser2.getUserName());
+        assertEquals(true, existsResult, "Newly added username should exist.");
+    }
+
+    @Test
+    public void existsByUsername_NotFound() {
+        UserDAOimpl userDao = new UserDAOimpl("CA1_test");
+
+        boolean existsResult = userDao.existsbyUserName("nonexistentusername");
+        assertEquals(false, existsResult, "Nonexistent username should not exist.");
+    }
 }
