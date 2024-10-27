@@ -21,6 +21,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
     @Override
     public boolean addUser(User user) {
 
+        // Validate input
         if (user == null) {
             return false;
         }
@@ -29,6 +30,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
 
+            // Set parameters for the prepared statement
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getUserName());
@@ -53,8 +55,9 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
     @Override
     public String getPasswordByUserName(String userName) {
-        String password = null;
 
+        String password = null;
+        // Validate input
         if (userName == null) {
             return null;
         }
@@ -63,6 +66,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
 
+            // Set parameters for the prepared statement
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -88,6 +92,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
     @Override
     public User getUserByName(String userName) {
 
+        // Validate input
         if (userName == null) {
             return null;
         }
@@ -98,9 +103,11 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
 
+            // Set parameters for the prepared statement
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery()) {
+                // Extract password if user found
                 if (rs.next()) {
                     user = new User(
                             rs.getString("firstName"),
@@ -126,7 +133,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
     @Override
     public boolean deleteUser(User user) {
-
+        // Validate input
         if (user == null) {
             return false;
         }
@@ -135,6 +142,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
 
+            // Set parameters for the prepared statement
             ps.setString(1, user.getUserName());
 
             int rowsAffected = ps.executeUpdate();
@@ -154,6 +162,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
     }
     @Override
     public boolean existsbyUserName(String userName) {
+        // Validate input
         if (userName == null) {
             return false;
         }
@@ -162,6 +171,7 @@ public class UserDAOimpl extends Dao implements UserDAO {
         try (Connection con = super.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
+            // Set parameters for the prepared statement
             ps.setString(1, userName);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

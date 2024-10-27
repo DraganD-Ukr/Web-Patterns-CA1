@@ -18,7 +18,7 @@ public class RatingDaoimpl extends Dao implements RatingDao {
 
     @Override
     public boolean addRating(Rating rating) {
-
+        // Validates the input parameters
         if (rating == null || rating.getUserID() <= 0 || rating.getSongID() <= 0 ||
                 rating.getRatingValue() < 1 || rating.getRatingValue() > 5) {
             return false;
@@ -28,6 +28,7 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         Connection conn = super.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            // goes through the prepared statement and sets the values
             ps.setInt(1, rating.getRatingID());
             ps.setInt(2, rating.getUserID());
             ps.setInt(3, rating.getSongID());
@@ -38,7 +39,7 @@ public class RatingDaoimpl extends Dao implements RatingDao {
 
 
         } catch (SQLException e) {
-            //this code catches if there is a duplicate entry error
+            // this code catches if there is a duplicate entry error
             if (  e.getErrorCode() == 1062) {
                 System.out.println(LocalDateTime.now() + ": Duplicate entry error occurred while adding a rating. RatingID " + rating.getRatingID() + " already exists.");
                 return false;
@@ -97,7 +98,7 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         Connection conn = super.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
+         // goes through the prepared statement and sets the values
             ps.setInt(1, rating.getUserID());
             ps.setInt(2, rating.getSongID());
             ps.setInt(3, rating.getRatingValue());
@@ -130,7 +131,8 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         Connection conn = super.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
+            
+            // goes through the prepared statement and sets the values
             ps.setInt(1, userID);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -165,6 +167,8 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         Connection conn = super.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            // goes through the prepared statement and sets the values
             ps.setInt(1, songID);
             ps.setInt(2, userID);
 
@@ -198,9 +202,9 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         Connection conn = super.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
+            // goes through the prepared statement and sets the values
             ps.setInt(1, songID);
-
+            
             try (ResultSet rs = ps.executeQuery()) {
                  while(rs.next()) {
 
