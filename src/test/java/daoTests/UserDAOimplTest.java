@@ -64,6 +64,7 @@ public class UserDAOimplTest {
     public void addUser_Success() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Test adding a new user
         boolean result = userDao.addUser(newUser);
 
         assertEquals(true, result);
@@ -73,6 +74,7 @@ public class UserDAOimplTest {
     public void addUser_Failure_NullUser() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Test adding a null user
         boolean result = userDao.addUser(null);
 
         assertEquals(false, result);
@@ -85,7 +87,6 @@ public class UserDAOimplTest {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
         // Ensure the user is added before checking password
-
         String password = userDao.getPasswordByUserName(user1.getUserName());
 
         assertEquals(user1.getPassword(), password);
@@ -95,6 +96,7 @@ public class UserDAOimplTest {
     public void getPasswordByUserName_NotFound() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Test getting a nonexistent user's password
         String password = userDao.getPasswordByUserName("nonexistentuser");
 
         assertEquals(null, password);
@@ -104,7 +106,7 @@ public class UserDAOimplTest {
     public void getUserByName_UserExists() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
-
+        // Ensure the user is added before checking existence
         User user = userDao.getUserByName(user1.getUserName());
 
         assertEquals(user1, user);
@@ -114,6 +116,7 @@ public class UserDAOimplTest {
     public void getUserByName_NotFound() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Test getting a nonexistent user
         User user = userDao.getUserByName("nonexistentuser");
 
         assertEquals(null, user);
@@ -126,6 +129,7 @@ public class UserDAOimplTest {
         // Ensure the guyToBeDeleted is added before deletion
         userDao.addUser(guyToBeDeleted);
 
+        // Test deleting an existing user
         boolean result = userDao.deleteUser(guyToBeDeleted);
 
         assertEquals(true, result);
@@ -135,6 +139,7 @@ public class UserDAOimplTest {
     public void deleteUser_Failure_NullUser() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Test deleting a null user
         boolean result = userDao.deleteUser(null);
 
         assertEquals(false, result);
@@ -144,6 +149,7 @@ public class UserDAOimplTest {
     public void deleteUser_Failure_InvalidID() {
         UserDAOimpl userDao = new UserDAOimpl("CA1_test");
 
+        // Test deleting a user with an invalid ID
         User invalidUser = User.builder()
                 .firstName("Invalid")
                 .lastName("User")
@@ -164,6 +170,7 @@ public class UserDAOimplTest {
         // Ensure the new user's data is added before checking existence.
         userDao.addUser(newUser2);
 
+        // Test checking existence of a user by username
         boolean existsResult = userDao.existsbyUserName(newUser2.getUserName());
         assertEquals(true, existsResult, "Newly added username should exist.");
     }
@@ -174,5 +181,6 @@ public class UserDAOimplTest {
 
         boolean existsResult = userDao.existsbyUserName("nonexistentusername");
         assertEquals(false, existsResult, "Nonexistent username should not exist.");
+
     }
 }

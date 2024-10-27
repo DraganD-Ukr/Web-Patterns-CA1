@@ -20,6 +20,7 @@ public class RatingDaoimplTest {
 
     @BeforeAll
     public static void init() {
+        // Sample ratings for testing
         ratingsToTestFromUser = new ArrayList<>();
 
         ratingsToTestFromUser.add(
@@ -114,6 +115,7 @@ public class RatingDaoimplTest {
 
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test adding a new rating
         boolean result = ratingDao.addRating(ratingToBeAdded);
 
         assertTrue(result);
@@ -126,6 +128,7 @@ public class RatingDaoimplTest {
     public void addRating_Failure_NullRating() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test adding a null rating
         boolean result = ratingDao.addRating(null);
 
         assertEquals(false, result);
@@ -137,6 +140,7 @@ public class RatingDaoimplTest {
 
         assertTrue(ratingDao.addRating(ratingToUpdated));
 
+        // Test updating a rating
         ratingToUpdated.setRatingValue(3);
         assertTrue(ratingDao.updateRating(ratingToUpdated));
 
@@ -149,6 +153,7 @@ public class RatingDaoimplTest {
 
         ratingDao.addRating(ratingToBeDeleted);
 
+        // Test deleting a rating
         boolean result = ratingDao.deleteRating(ratingToBeDeleted);
 
         assertEquals(true, result);
@@ -158,6 +163,7 @@ public class RatingDaoimplTest {
     public void getRatingByUserID_NotFound() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting ratings of a nonexistent user
         List<Rating> ratings = ratingDao.getRatingsByUserID(42069);
 
         assertTrue(ratings.isEmpty());
@@ -167,6 +173,7 @@ public class RatingDaoimplTest {
     public void getRatingBySongID_NotFound() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting ratings of a nonexistent song
         List<Rating> ratings = ratingDao.getRatingsBySongID(999);
 
         assertTrue(ratings.isEmpty());
@@ -176,6 +183,7 @@ public class RatingDaoimplTest {
     public void getRatingByUserID_IsFound() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting ratings of a user
         List<Rating> ratings = ratingDao.getRatingsByUserID(1);
 
         assertEquals(ratingsToTestFromUser, ratings);
@@ -185,6 +193,7 @@ public class RatingDaoimplTest {
     public void getRatingBySongID_IsFound() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting ratings of a song
         List<Rating> ratings = ratingDao.getRatingsBySongID(2);
 
         assertEquals(ratingsBySongID, ratings);
@@ -194,6 +203,7 @@ public class RatingDaoimplTest {
     public void getRatingBySongID_UserExists() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting ratings of a song
         List<Rating> ratings = ratingDao.getRatingsBySongID(1);
 
         assertFalse(ratings.isEmpty());
@@ -205,10 +215,12 @@ public class RatingDaoimplTest {
     public void addDuplicateRating_Failure() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test adding a duplicate rating
         ratingDao.addRating(ratingToBeDuplicated);
 
         assertFalse(ratingDao.addRating(ratingToBeDuplicated));
 
+        // Deletion of the duplicate rating
         ratingDao.deleteRating(ratingToBeDuplicated);
     }
 
@@ -217,6 +229,7 @@ public class RatingDaoimplTest {
     public void getRatingByUserIDandSongID_SongFound() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting a rating by user ID and song ID
         Rating existingRating = ratingDao.getRatingByUserIDandSongID(1, 1);
         assertNotNull(existingRating);
     }
@@ -225,6 +238,7 @@ public class RatingDaoimplTest {
     public void getRatingByUserIDandSongID_UserDoesNotExist() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting a rating by user ID and song ID
         Rating nonExistentUserRating = ratingDao.getRatingByUserIDandSongID(1, 9999);
         assertNull(nonExistentUserRating);
     }
@@ -233,6 +247,7 @@ public class RatingDaoimplTest {
     public void getRatingByUserIDandSongID_SongDoesNotExist() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting a rating by user ID and song ID
         Rating nonExistentSongRating = ratingDao.getRatingByUserIDandSongID(9999, 1);
         assertNull(nonExistentSongRating);
     }
@@ -241,7 +256,9 @@ public class RatingDaoimplTest {
     public void getRatingByUserIDandSongID_RatingExists() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting a rating by user ID and song ID
         Rating existingRating = ratingDao.getRatingByUserIDandSongID(2, 2);
+
         assertNotNull(existingRating);
         assertEquals(7, existingRating.getRatingID());
         assertEquals(2, existingRating.getUserID());
@@ -253,6 +270,7 @@ public class RatingDaoimplTest {
     public void getRatingByUserIDandSongID_NoRatingExists() {
         RatingDaoimpl ratingDao = new RatingDaoimpl("CA1_test");
 
+        // Test getting a rating by user ID and song ID
         Rating nonExistentRating = ratingDao.getRatingByUserIDandSongID(69, 69);
         assertNull(nonExistentRating);
     }
