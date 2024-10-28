@@ -25,9 +25,9 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         }
 
         String sql = "INSERT INTO ratings (ratingID, userID, songID, ratingValue) VALUES (?, ?, ?, ?)";
-        Connection conn = super.getConnection();
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = super.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             // goes through the prepared statement and sets the values
             ps.setInt(1, rating.getRatingID());
             ps.setInt(2, rating.getUserID());
@@ -64,10 +64,11 @@ public class RatingDaoimpl extends Dao implements RatingDao {
             return false;
         }
 
-        Connection conn = super.getConnection();
+
         String sql = "DELETE FROM ratings WHERE ratingID = ?";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = super.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, rating.getRatingID());
 
@@ -95,9 +96,10 @@ public class RatingDaoimpl extends Dao implements RatingDao {
 
 
         String sql = "UPDATE ratings SET userID = ?, songID = ?, ratingValue = ? WHERE ratingID = ?";
-        Connection conn = super.getConnection();
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        try (Connection conn = super.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
          // goes through the prepared statement and sets the values
             ps.setInt(1, rating.getUserID());
             ps.setInt(2, rating.getSongID());
@@ -128,9 +130,10 @@ public class RatingDaoimpl extends Dao implements RatingDao {
 
         List<Rating> rating = new ArrayList<>();
 
-        Connection conn = super.getConnection();
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        try (Connection conn = super.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
             // goes through the prepared statement and sets the values
             ps.setInt(1, userID);
@@ -164,9 +167,10 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         String sql = "SELECT * FROM ratings WHERE songID = ? AND userID = ?";
         Rating rating = null;
 
-        Connection conn = super.getConnection();
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        try (Connection conn = super.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
             // goes through the prepared statement and sets the values
             ps.setInt(1, songID);
@@ -199,9 +203,10 @@ public class RatingDaoimpl extends Dao implements RatingDao {
         String sql = "SELECT * FROM ratings WHERE songID = ?";
         List<Rating> rating = new ArrayList<Rating>();
 
-        Connection conn = super.getConnection();
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        try (Connection conn = super.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             // goes through the prepared statement and sets the values
             ps.setInt(1, songID);
             
