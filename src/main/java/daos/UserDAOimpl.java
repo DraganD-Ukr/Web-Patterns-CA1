@@ -1,6 +1,7 @@
 package daos;
 
 import Business.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,10 +21,17 @@ public class UserDAOimpl extends Dao implements UserDAO {
     @Override
     public boolean addUser(User user) {
 
-        Connection conn = super.getConnection();
+        // Validate input
+        if (user == null) {
+            return false;
+        }
 
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
 
+
+        try ( Connection conn = super.getConnection();
+              PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
+
+            // Set parameters for the prepared statement
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getUserName());
@@ -48,20 +56,23 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
     @Override
     public String getPasswordByUserName(String userName) {
-        String password = null;
 
+        String password = null;
+        // Validate input
         if (userName == null) {
             return null;
         }
 
-        Connection con = super.getConnection();
 
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
 
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
+
+            // Set parameters for the prepared statement
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if(rs.next()){
+                if (rs.next()) {
                     password = rs.getString("password");
                 }
 
@@ -83,19 +94,23 @@ public class UserDAOimpl extends Dao implements UserDAO {
     @Override
     public User getUserByName(String userName) {
 
+        // Validate input
         if (userName == null) {
             return null;
         }
 
         User user = null;
 
-        Connection con = super.getConnection();
 
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
+        try (
+           Connection con = super.getConnection();
+           PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
 
+            // Set parameters for the prepared statement
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery()) {
+                // Extract password if user found
                 if (rs.next()) {
                     user = new User(
                             rs.getString("firstName"),
@@ -121,15 +136,17 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
     @Override
     public boolean deleteUser(User user) {
-
+        // Validate input
         if (user == null) {
             return false;
         }
 
-        Connection con = super.getConnection();
 
-        try ( PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
 
+        try ( Connection con = super.getConnection();
+              PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
+
+            // Set parameters for the prepared statement
             ps.setString(1, user.getUserName());
 
             int rowsAffected = ps.executeUpdate();
@@ -146,5 +163,32 @@ public class UserDAOimpl extends Dao implements UserDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    @Override
+    public boolean existsbyUserName(String userName) {
+        // Validate input
+        if (userName == null) {
+            return false;
+        }
+
+        String query = "SELECT COUNT(*) FROM Users WHERE userName = ?";
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            // Set parameters for the prepared statement
+            ps.setString(1, userName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": An SQLException occurred while checking if user exists.\nError: " + e.getMessage());
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println(LocalDateTime.now() + ": A NullPointerException occurred while checking if user exists.\nError: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }
