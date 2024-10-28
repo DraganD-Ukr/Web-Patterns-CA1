@@ -25,11 +25,11 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     @Override
     public boolean createPlaylist(Playlist playlist) {
 
-            Connection con = super.getConnection();
-
             String query = "INSERT INTO Playlists (userID, name, isPublic) VALUES (?, ?, ?)";
 
-            try (PreparedStatement ps = con.prepareStatement(query)) {
+            try (Connection con = super.getConnection();
+                 PreparedStatement ps = con.prepareStatement(query)
+            ) {
                 ps.setInt(1, playlist.getUserId());
                 ps.setString(2, playlist.getName());
                 ps.setBoolean(3, playlist.isPublic());
@@ -47,14 +47,14 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
     @Override
     public boolean deletePlaylistByID(int playlistId) {
-        Connection con = null;
-        PreparedStatement ps = null;
+
 
         String query = "DELETE FROM Playlists WHERE playlistID = ?";
 
-        try {
-            con = super.getConnection();
-            ps = con.prepareStatement(query);
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)
+        ){
+
             ps.setInt(1, playlistId);
 
             int rowsAffected = ps.executeUpdate();
@@ -71,10 +71,12 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean addSongToPlaylist(int playlistId, int songId) {
-        Connection con = super.getConnection();
 
         String query = "INSERT INTO PlaylistSongs (playlistID, songID) VALUES (?, ?)";
-        try(PreparedStatement ps = con.prepareStatement(query)) {
+
+        try(Connection con = super.getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+        ) {
             ps.setInt(1, playlistId);
             ps.setInt(2, songId);
 
@@ -90,10 +92,12 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean removeSongFromPlaylist(int playlistId, int songId) {
-        Connection con = super.getConnection();
 
         String query = "DELETE FROM PlaylistSongs WHERE playlistID = ? AND songID = ?";
-        try(PreparedStatement ps = con.prepareStatement(query)) {
+
+        try(Connection con = super.getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+        ) {
             ps.setInt(1, playlistId);
             ps.setInt(2, songId);
 
@@ -109,10 +113,12 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean renamePlaylist(int playlistId, String newName) {
-        Connection con = super.getConnection();
 
-        String querry = "UPDATE Playlists SET name = ? WHERE playlistID = ?";
-        try(PreparedStatement ps = con.prepareStatement(querry)) {
+        String query = "UPDATE Playlists SET name = ? WHERE playlistID = ?";
+
+        try(Connection con = super.getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+        ) {
             ps.setString(1, newName);
             ps.setInt(2, playlistId);
 
@@ -131,12 +137,15 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     public List<Playlist> getPlaylists(int playlistId) {
 
         List<Playlist> playlists = new ArrayList<>();
-        Connection con = super.getConnection();
+
 
         String querry = "SELECT * FROM Playlists WHERE userID = ? OR isPublic = 1";
 
-        try(PreparedStatement ps = con.prepareStatement(querry)) {
+        try(Connection con = super.getConnection();
+            PreparedStatement ps = con.prepareStatement(querry)
+        ) {
             ps.setInt(1, playlistId);
+
             try(ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     playlists.add(Playlist.builder()
@@ -160,46 +169,51 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
     @Override
     public List<Song> getSongsInPlaylistByID(int playlistId) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
 
         Song s;
         List<Song> result = new ArrayList<>();
 
-
-        try {
-            con = super.getConnection();
-
-            String query = """
+        String query = """
                     SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount, s.averageRating, s.ratingsSum
                     FROM Songs s
                     JOIN PlaylistSongs ps ON s.songID = ps.songID
                     WHERE ps.playlistID = ?;
                     """;
-            ps = con.prepareStatement(query);
+
+        try(Connection con = super.getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+        ) {
+
             ps.setInt(1, playlistId);
-            rs = ps.executeQuery();
 
-            while (rs.next()) {
+            try(ResultSet rs = ps.executeQuery()) {
 
-                s = Song.builder()
-                        .songID(rs.getInt("songID"))
-                        .title(rs.getString("title"))
-                        .albumID(rs.getInt("albumID"))
-                        .artistID(rs.getInt("artistID"))
-                        .length(rs.getTime("length").toLocalTime())
-                        .ratingCount(rs.getInt("ratingCount"))
-                        .averageRating(rs.getDouble("averageRating"))
-                        .ratingsSum(rs.getInt("ratingsSum"))
-                        .build();
+                while (rs.next()) {
 
-                result.add(s);
+                    s = Song.builder()
+                            .songID(rs.getInt("songID"))
+                            .title(rs.getString("title"))
+                            .albumID(rs.getInt("albumID"))
+                            .artistID(rs.getInt("artistID"))
+                            .length(rs.getTime("length").toLocalTime())
+                            .ratingCount(rs.getInt("ratingCount"))
+                            .averageRating(rs.getDouble("averageRating"))
+                            .ratingsSum(rs.getInt("ratingsSum"))
+                            .build();
+
+                    result.add(s);
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getSongsInPlaylistByID() method: " + e.getMessage());
+                e.printStackTrace();
             }
+
+
+
         } catch (SQLException e) {
             System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
-        } finally {
-            closeResources(rs, ps, con);
+            e.printStackTrace();
         }
 
         return result;
