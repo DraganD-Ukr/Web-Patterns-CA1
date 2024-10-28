@@ -26,9 +26,10 @@ public class UserDAOimpl extends Dao implements UserDAO {
             return false;
         }
 
-        Connection conn = super.getConnection();
 
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
+
+        try ( Connection conn = super.getConnection();
+              PreparedStatement ps = conn.prepareStatement("INSERT INTO Users (firstName, lastName, userName, password) VALUES (?, ?, ?, ?)")) {
 
             // Set parameters for the prepared statement
             ps.setString(1, user.getFirstName());
@@ -62,9 +63,10 @@ public class UserDAOimpl extends Dao implements UserDAO {
             return null;
         }
 
-        Connection con = super.getConnection();
 
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
+
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
 
             // Set parameters for the prepared statement
             ps.setString(1, userName);
@@ -99,9 +101,10 @@ public class UserDAOimpl extends Dao implements UserDAO {
 
         User user = null;
 
-        Connection con = super.getConnection();
 
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
+        try (
+           Connection con = super.getConnection();
+           PreparedStatement ps = con.prepareStatement("SELECT * FROM Users WHERE userName = ?")) {
 
             // Set parameters for the prepared statement
             ps.setString(1, userName);
@@ -138,9 +141,10 @@ public class UserDAOimpl extends Dao implements UserDAO {
             return false;
         }
 
-        Connection con = super.getConnection();
 
-        try (PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
+
+        try ( Connection con = super.getConnection();
+              PreparedStatement ps = con.prepareStatement("DELETE FROM Users WHERE userName= ?")) {
 
             // Set parameters for the prepared statement
             ps.setString(1, user.getUserName());
