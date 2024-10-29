@@ -28,31 +28,32 @@ public class ArtistDaoImpl extends Dao implements ArtistDAO {
     @Override
     public Artist getArtistById(int id) {
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+
         Artist artist = null;
+        String query = "SELECT * FROM Artists WHERE artistID = ?";
 
-        try {
-            con = getConnection();
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(query)
+        ) {
 
-            String query = "SELECT * FROM Artists WHERE artistID = ?";
-            ps = con.prepareStatement(query);
             ps.setInt(1, id);
-            rs = ps.executeQuery();
 
-            if (rs.next()) {
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
 //                Using builder for easier object creation
-                artist = Artist.builder()
-                        // Get the properties of an artist from the resultset
-                        .artistId(rs.getInt("artistId"))
-                        .name(rs.getString("name"))
-                        .build();
+                    artist = Artist.builder()
+                            // Get the properties of an artist from the resultset
+                            .artistId(rs.getInt("artistId"))
+                            .name(rs.getString("name"))
+                            .build();
+                }
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
             }
+
+
         } catch (SQLException e) {
             System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
-        } finally {
-            closeResources(rs, ps, con);
         }
         return artist;
 
@@ -61,31 +62,34 @@ public class ArtistDaoImpl extends Dao implements ArtistDAO {
     @Override
     public Artist getArtistByName(String name) {
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+
         Artist artist = null;
+        String query = "SELECT * FROM Artists WHERE name = ?";
 
-        try {
-            con = getConnection();
+        try(Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+        ) {
 
-            String query = "SELECT * FROM Artists WHERE name = ?";
-            ps = con.prepareStatement(query);
             ps.setString(1, name);
-            rs = ps.executeQuery();
 
-            if (rs.next()) {
+            try (ResultSet rs = ps.executeQuery()){
+
+                if (rs.next()) {
 //                Using builder for easier object creation
-                artist = Artist.builder()
-                        // Get the properties of an artist from the resultset
-                        .artistId(rs.getInt("artistId"))
-                        .name(rs.getString("name"))
-                        .build();
+                    artist = Artist.builder()
+                            // Get the properties of an artist from the resultset
+                            .artistId(rs.getInt("artistId"))
+                            .name(rs.getString("name"))
+                            .build();
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
             }
+
+
         } catch (SQLException e) {
             System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
-        } finally {
-            closeResources(rs, ps, con);
         }
         return artist;
 
@@ -95,36 +99,39 @@ public class ArtistDaoImpl extends Dao implements ArtistDAO {
     public List<Artist> getAllArtistsWhereNameLike(String artistName) {
 
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+
 
         Artist artist;
         List<Artist> result = new ArrayList<>();
 
+        String query = "SELECT * FROM Artists WHERE name LIKE ? ORDER BY artistID";
 
-        try {
-            con = getConnection();
+        try (Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+        ){
 
-            String query = "SELECT * FROM Artists WHERE name LIKE ? ORDER BY artistID";
-            ps = con.prepareStatement(query);
             ps.setString(1, "%"+artistName+"%");
-            rs = ps.executeQuery();
 
-            while (rs.next()) {
+            try(ResultSet rs = ps.executeQuery()){
+
+                while (rs.next()) {
 //                Using builder for easier object creation
-                artist = Artist.builder()
-                        // Get the properties of an artist from the resultset
-                        .artistId(rs.getInt("artistId"))
-                        .name(rs.getString("name"))
-                        .build();
+                    artist = Artist.builder()
+                            // Get the properties of an artist from the resultset
+                            .artistId(rs.getInt("artistId"))
+                            .name(rs.getString("name"))
+                            .build();
 //                Add the artist to the result list
-                result.add(artist);
+                    result.add(artist);
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
             }
+
+
         } catch (SQLException e) {
             System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
-        } finally {
-            closeResources(rs, ps, con);
         }
 
         return result;
@@ -135,35 +142,37 @@ public class ArtistDaoImpl extends Dao implements ArtistDAO {
     @Override
     public List<Artist> getAllArtists() {
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+
 
         Artist artist;
         List<Artist> result = new ArrayList<>();
 
+        String query = "SELECT * FROM Artists ORDER BY artistID";
 
-        try {
-            con = getConnection();
+        try (Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement(query)
+            ) {
 
-            String query = "SELECT * FROM Artists ORDER BY artistID";
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
+            try(ResultSet rs = ps.executeQuery()){
 
-            while (rs.next()) {
+                while (rs.next()) {
 //                Using builder for easier object creation
-                artist = Artist.builder()
-                        // Get the properties of an artist from the resultset
-                        .artistId(rs.getInt("artistId"))
-                        .name(rs.getString("name"))
-                        .build();
+                    artist = Artist.builder()
+                            // Get the properties of an artist from the resultset
+                            .artistId(rs.getInt("artistId"))
+                            .name(rs.getString("name"))
+                            .build();
 //                Add the artist to the result list
-                result.add(artist);
+                    result.add(artist);
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
             }
+
+
         } catch (SQLException e) {
             System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
-        } finally {
-            closeResources(rs, ps, con);
         }
 
         return result;
