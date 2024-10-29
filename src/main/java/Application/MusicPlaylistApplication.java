@@ -13,12 +13,14 @@ public class MusicPlaylistApplication {
     private static final ArtistDAO artistDAO = new ArtistDaoImpl("CA1_test");
     private static final AlbumDAO albumDAO = new AlbumDaoImpl("CA1_test");
     private static final SongDAO songDAO = new SongDAOImpl("CA1_test");
-//    private static final PlaylistDAO playlistDAO = new PlaylistDAOimpl("CA1_test");
+    private static final PlaylistDAO playlistDAO = new PlaylistDAOimpl("CA1_test");
     private static final RatingDao ratingDAO = new RatingDaoimpl("CA1_test");
     private static final Encryption encryption = new Encryption();
     private static User currentUser = null;
 
     public static void main(String[] args) {
+
+//    ----------------LOGIN/REGISTER FUNCTIONALITY -----------------------
 
         boolean exit = false;
 
@@ -178,7 +180,7 @@ public class MusicPlaylistApplication {
     }
 
 
-
+//    ------------------------------------MAIN FUNCTIONALITY--------------------------------------
 
 
 
@@ -246,7 +248,7 @@ public class MusicPlaylistApplication {
         int choice = getMenuChoice();
         switch (choice) {
             case 1:
-//                createPlaylist();
+                createPlaylist();
                 break;
             case 2:
 //                editPlaylist();
@@ -259,16 +261,19 @@ public class MusicPlaylistApplication {
         }
     }
 
-//    private static void createPlaylist() {
-//        String name = validateInput("Enter playlist name: ", ".*", "");
-//        boolean isPublic = validateInput("Is the playlist public? (yes/no): ", "^(yes|no)$", "Invalid input. Enter 'yes' or 'no'.").equalsIgnoreCase("yes");
-//        Playlist playlist = new Playlist(name, currentUser.getUserID(), isPublic);
-//        if (playlistDAO.addPlaylist(playlist)) {
-//            System.out.println("Playlist created successfully!");
-//        } else {
-//            System.out.println("Failed to create playlist.");
-//        }
-//    }
+    private static void createPlaylist() {
+
+        String name = validateInput("Enter playlist name: ", ".*", "");
+        boolean isPublic = validateInput("Is the playlist public? (yes/no): ", "^(yes|no)$", "Invalid input. Enter 'yes' or 'no'.").equalsIgnoreCase("yes");
+
+        Playlist playlist = new Playlist(currentUser.getUserID(), name, isPublic);
+
+        if (playlistDAO.createPlaylist(playlist) >= 0) {
+            System.out.println("Playlist created successfully!");
+        } else {
+            System.out.println("Failed to create playlist.");
+        }
+    }
 
 //    private static void editPlaylist() {
 //        String playlistName = validateInput("Enter playlist name to edit: ", ".*", "");
