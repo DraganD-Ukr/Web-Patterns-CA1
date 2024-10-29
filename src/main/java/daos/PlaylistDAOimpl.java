@@ -181,7 +181,33 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
     @Override
     public Playlist getPlaylistByID(int playlistId) {
-        return null;
+        Playlist playlist = null;
+        String query = "SELECT * FROM Playlists WHERE playlistID = ?";
+
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setInt(1, playlistId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    playlist = Playlist.builder()
+                            .playlistId(rs.getInt("playlistID"))
+                            .userId(rs.getInt("userID"))
+                            .name(rs.getString("name"))
+                            .isPublic(rs.getBoolean("isPublic"))
+                            .build();
+                }
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while running the query.");
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing the SQL query");
+            e.printStackTrace();
+        }
+
+        return playlist;
     }
 
 
