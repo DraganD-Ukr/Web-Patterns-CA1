@@ -55,4 +55,10 @@ public interface SongDAO {
      */
     List<Song> getSongsInPlaylistByPlaylistName(String name);
 
+    /**
+     * Gets top-rated song
+     * @return  {@link Song} object with the biggest average rating
+     */
+    Song getTopRatedSong();
+
 }
