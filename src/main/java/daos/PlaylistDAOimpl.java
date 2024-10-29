@@ -41,11 +41,11 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     @Override
     public boolean createPlaylist(Playlist playlist) {
 
+            Connection con = super.getConnection();
+
             String query = "INSERT INTO Playlists (userID, name, isPublic) VALUES (?, ?, ?)";
 
-            try (Connection con = super.getConnection();
-                 PreparedStatement ps = con.prepareStatement(query)
-            ) {
+            try (PreparedStatement ps = con.prepareStatement(query)) {
                 ps.setInt(1, playlist.getUserId());
                 ps.setString(2, playlist.getName());
                 ps.setBoolean(3, playlist.isPublic());
@@ -63,14 +63,14 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
     @Override
     public boolean deletePlaylistByID(int playlistId) {
-
+        Connection con = null;
+        PreparedStatement ps = null;
 
         String query = "DELETE FROM Playlists WHERE playlistID = ?";
 
-        try (Connection con = super.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)
-        ){
-
+        try {
+            con = super.getConnection();
+            ps = con.prepareStatement(query);
             ps.setInt(1, playlistId);
 
             int rowsAffected = ps.executeUpdate();
@@ -84,6 +84,47 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         return false;
     }
 
+    //Done by Aloysius Wilfred Pacheco D00253302
+    @Override
+    public int getNextPlaylistID() {
+        Connection con = super.getConnection();
+        int nextId = -1; //Default to an invalid ID in case of failure
+        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, "CA1_test");
+            ps.setString(2, "Playlists");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    nextId = rs.getInt("AUTO_INCREMENT");
+                }
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while processing the result.");
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing the statement.");
+            e.printStackTrace();
+        }
+        return nextId;
+    }
+
+    @Override
+    public boolean resetPlatylistAutoIncrementID(int setID) {
+        Connection con = super.getConnection();
+
+        String query = "ALTER TABLE Playlists AUTO_INCREMENT = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, setID);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing the statement.");
+            e.printStackTrace();
+        }
+        return false;
+    }
     //Done by Aloysius Wilfred Pacheco D00253302
     @Override
     public boolean addSongToPlaylist(int playlistId, int songId) {
