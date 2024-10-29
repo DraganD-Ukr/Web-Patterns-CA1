@@ -231,6 +231,10 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         return result;
     }
 
+    @Override
+    public Playlist getPlaylistByID(int playlistId) {
+        return null;
+    }
 
 
 }
