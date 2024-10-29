@@ -251,6 +251,7 @@ public class SongDAOImpl extends Dao implements SongDAO{
 
     @Override
     public Song getTopRatedSong(){
+
         Song topSong = null;
         String query = """
             SELECT songID, title, albumID, artistID, length, ratingCount, averageRating, ratingsSum
@@ -281,6 +282,43 @@ public class SongDAOImpl extends Dao implements SongDAO{
         }
 
         return topSong;
+    }
+
+    @Override
+    public Song getMostPopularSong() {
+
+        Song mostPopularSong = null;
+        String query = """
+            SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount, s.averageRating, s.ratingsSum, COUNT(ps.songID) as playlistCount
+            FROM Songs s
+            JOIN PlaylistSongs ps ON s.songID = ps.songID
+            GROUP BY s.songID
+            ORDER BY playlistCount DESC
+            LIMIT 1;
+            """;
+
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                mostPopularSong = Song.builder()
+                        .songID(rs.getInt("songID"))
+                        .title(rs.getString("title"))
+                        .albumID(rs.getInt("albumID"))
+                        .artistID(rs.getInt("artistID"))
+                        .length(rs.getTime("length").toLocalTime())
+                        .ratingCount(rs.getInt("ratingCount"))
+                        .averageRating(rs.getDouble("averageRating"))
+                        .ratingsSum(rs.getInt("ratingsSum"))
+                        .build();
+            }
+        } catch (SQLException e) {
+            System.out.println("Exception occurred in the getMostPopularSong() method: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return mostPopularSong;
     }
 
 }

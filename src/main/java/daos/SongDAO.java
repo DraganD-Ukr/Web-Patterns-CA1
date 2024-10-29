@@ -61,4 +61,10 @@ public interface SongDAO {
      */
     Song getTopRatedSong();
 
+    /**
+     * Gets the most popular song(appears most times in playlists)
+     * @return {@link Song} object with the most appearances in playlists
+     */
+    Song getMostPopularSong();
+
 }
