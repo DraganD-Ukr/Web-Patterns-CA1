@@ -24,62 +24,39 @@ class PlaylistDAOimplTest {
 
         testPlaylistDao = new PlaylistDAOimpl("CA1_test");
 
-        testPlaylistDao.startTransaction();
-        lastPlaylistID = testPlaylistDao.getNextPlaylistID();
-
         createPlaylistTestEntity = Playlist.builder()
-                .playlistId(lastPlaylistID+1)
                 .userId(1)
                 .name("Test Playlist")
                 .isPublic(true)
                 .build();
 
         deletePlaylistTestEntity = Playlist.builder()
-                .playlistId(lastPlaylistID+2)
                 .userId(2)
                 .name("Test Playlist 2")
                 .isPublic(false)
                 .build();
     }
 
-    @AfterEach
-    public void resetAutoIncrement() {
-    }
-    @AfterAll
-    public static void sweepaDaFloor() {
-        testPlaylistDao.rollbackTransaction();
-    }
 
     @Test
     void createPlaylist() {
-        assertTrue(testPlaylistDao.createPlaylist(createPlaylistTestEntity));
-        testPlaylistDao.deletePlaylistByID(createPlaylistTestEntity.getPlaylistId());
+        int id = testPlaylistDao.createPlaylist(createPlaylistTestEntity);
+        assertTrue(id >= 0);
+        testPlaylistDao.deletePlaylistByID(id);
     }
 
     @Test
     void deletePlaylist_success(){
         System.out.println("Playlist ID: " + deletePlaylistTestEntity.getPlaylistId());
         //created to be destroyed (Playlists were harmed in the making of this test XD XD)
-        testPlaylistDao.createPlaylist(deletePlaylistTestEntity);
+
+        deletePlaylistTestEntity.setPlaylistId(testPlaylistDao.createPlaylist(deletePlaylistTestEntity));
+
         assertTrue(testPlaylistDao.deletePlaylistByID(deletePlaylistTestEntity.getPlaylistId()));
     }
 
 
-    @Test
-    void resetPlaylistAutoIncrementID_success() {
-        //get the current AUTO_INCREMENT value
-        int originalAutoIncrementID = testPlaylistDao.getNextPlaylistID();
-        int testAutoIncrementID = 11;
 
-        //test AUTO_INCREMENT to 11
-        assertTrue(testPlaylistDao.resetPlatylistAutoIncrementID(testAutoIncrementID));
-//        assertEquals(testAutoIncrementID, testPlaylistDao.getNextPlaylistID(),
-//                " resetting AUTO_INCREMENT to  " + testAutoIncrementID);
-
-        //reset AUTO_INCREMENT to original value
-        //testPlaylistDao.resetPlatylistAutoIncrementID(originalAutoIncrementID);
-
-    }
 
 
 

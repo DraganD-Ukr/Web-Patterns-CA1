@@ -7,9 +7,10 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
+@EqualsAndHashCode
 public class Playlist {
 
-    @NonNull
+    @EqualsAndHashCode.Exclude
     private int playlistId;
     @NonNull
     private int userId;

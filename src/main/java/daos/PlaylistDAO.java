@@ -7,13 +7,9 @@ import java.util.List;
 
 public interface PlaylistDAO {
 
-    boolean createPlaylist(Playlist playlist);
+    int createPlaylist(Playlist playlist);
 
     boolean deletePlaylistByID(int playlistId);
-
-    int getNextPlaylistID();
-
-    boolean resetPlatylistAutoIncrementID(int setID);
 
     boolean addSongToPlaylist(int playlistId, int songId);
 
