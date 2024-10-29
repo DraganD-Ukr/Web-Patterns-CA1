@@ -185,13 +185,16 @@ public class MusicPlaylistApplication {
 
 
     private static void generalAccess() {
+
         System.out.println("\nGeneral Access Menu:");
         System.out.println("1 View all artists");
         System.out.println("2 View all albums for an artist");
         System.out.println("3 View all songs in an album");
         System.out.println("4 Search for songs");
         System.out.print("Enter your choice: ");
+
         int choice = getMenuChoice();
+
         switch (choice) {
             case 1:
                 viewAllArtists();
@@ -208,43 +211,57 @@ public class MusicPlaylistApplication {
             default:
                 System.out.println("Invalid choice.");
         }
+
     }
 
     private static void viewAllArtists() {
+
         List<Artist> artists = artistDAO.getAllArtists();
+
         for (Artist artist : artists) {
             System.out.println(artist);
         }
+
     }
 
     private static void viewAlbumsForArtist() {
+
         String artistName = validateInput("Enter artist name: ", ".*", "");
+
         List<Album> albums = albumDAO.getAllAlbumsWhereArtistNameLike(artistName);
         for (Album album : albums) {
             System.out.println(album);
         }
+
     }
 
     private static void viewSongsInAlbum() {
+
         String albumTitle = validateInput("Enter album title: ", ".*", "");
+
         List<Song> songs = songDAO.findSongsFromAlbumByName(albumTitle);
         for (Song song : songs) {
             System.out.println(song);
         }
+
     }
 
     private static void searchSongByTitle() {
+
         String songTitle = validateInput("Enter search query (title/artist/album): ", ".*", "");
         Song song = songDAO.findSongByTitle(songTitle);
         System.out.println(song);
+
     }
 
     private static void managePlaylists() {
+
         System.out.println("\nManage Playlists Menu:");
         System.out.println("1 Create a playlist");
         System.out.println("2 Edit a playlist");
         System.out.println("3 View playlists");
         System.out.print("Enter your choice: ");
+
         int choice = getMenuChoice();
         switch (choice) {
             case 1:
@@ -259,6 +276,7 @@ public class MusicPlaylistApplication {
             default:
                 System.out.println("Invalid choice.");
         }
+
     }
 
     private static void createPlaylist() {
@@ -343,29 +361,36 @@ public class MusicPlaylistApplication {
     }
 
     private static void renamePlaylist(Playlist playlist) {
+
         String newName = validateInput("Enter new playlist name: ", ".*", "");
         playlist.setName(newName);
+
         if (playlistDAO.renamePlaylist(playlist.getPlaylistId(), newName)) {
             System.out.println("Playlist renamed successfully.");
         } else {
             System.out.println("Failed to rename playlist.");
         }
+
     }
 
     private static void viewPlaylists() {
+
         List<Playlist> playlists = playlistDAO.getPlaylists(currentUser.getUserID());
         for (Playlist playlist : playlists) {
             System.out.println(playlist);
         }
+
     }
 
     private static void manageRatings() {
+
         System.out.println("\nManage Ratings Menu:");
         System.out.println("1 Rate a song");
         System.out.println("2 View rated songs");
         System.out.println("3 Get top-rated song");
         System.out.println("4 Get most popular song");
         System.out.print("Enter your choice: ");
+
         int choice = getMenuChoice();
         switch (choice) {
             case 1:
@@ -375,20 +400,24 @@ public class MusicPlaylistApplication {
                 viewRatedSongs();
                 break;
             case 3:
-//                getTopRatedSong();
+                getTopRatedSong();
                 break;
             case 4:
-//                getMostPopularSong();
+                getMostPopularSong();
                 break;
             default:
                 System.out.println("Invalid choice.");
         }
+
     }
 
     private static void rateSong() {
+
         String songTitle = validateInput("Enter song title to rate: ", ".*", "");
         int rating = Integer.parseInt(validateInput("Enter rating (1-5): ", "^[1-5]$", "Invalid rating. Enter a number between 1 and 5."));
+
         Song song = songDAO.findSongByTitle(songTitle);
+
         if (song != null) {
             Rating ratingObj = new Rating(currentUser.getUserID(), song.getSongID(), rating);
             if (ratingDAO.addRating(ratingObj)) {
@@ -399,34 +428,48 @@ public class MusicPlaylistApplication {
         } else {
             System.out.println("Song not found.");
         }
+
     }
 
     private static void viewRatedSongs() {
+
         List<Rating> ratings = ratingDAO.getRatingsByUserID(currentUser.getUserID());
         for (Rating rating : ratings) {
             System.out.println(rating);
         }
+
     }
 
-//    TODO: Implement getTopRatedSong() method in Rating DAO
-//    private static void getTopRatedSong() {
-//        Song topRatedSong = songDAO.getTopRatedSong();
-//        if (topRatedSong != null) {
-//            System.out.println("Top-rated song: " + topRatedSong);
-//        } else {
-//            System.out.println("No ratings found.");
-//        }
-//    }
 
-//    TODO: Implement getMostPopularSong() (appeared most times in playlist) method in Rating DAO
-//    private static void getMostPopularSong() {
-//        Song mostPopularSong = songDAO.getMostPopularSong();
-//        if (mostPopularSong != null) {
-//            System.out.println("Most popular song: " + mostPopularSong);
-//        } else {
-//            System.out.println("No playlists found.");
-//        }
-//    }
+    private static void getTopRatedSong() {
+
+        Song topRatedSong = songDAO.getTopRatedSong();
+
+        if (topRatedSong != null) {
+            System.out.println("Top-rated song: " + topRatedSong);
+        } else {
+            System.out.println("No ratings found.");
+        }
+
+    }
+
+
+    private static void getMostPopularSong() {
+
+        Song mostPopularSong = songDAO.getMostPopularSong();
+
+        if (mostPopularSong != null) {
+            System.out.println("Most popular song: " + mostPopularSong);
+        } else {
+            System.out.println("No playlists found.");
+        }
+
+    }
+
+
+
+
+
 
     private static void logout() {
         currentUser = null;
