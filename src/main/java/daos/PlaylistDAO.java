@@ -19,8 +19,6 @@ public interface PlaylistDAO {
 
     List<Playlist> getPlaylists(int UserID);
 
-    List<Song> getSongsInPlaylistByID(int playlistId);
-
     Playlist getPlaylistByID(int playlistId);
 
 }

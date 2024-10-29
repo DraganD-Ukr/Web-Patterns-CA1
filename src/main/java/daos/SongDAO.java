@@ -48,4 +48,11 @@ public interface SongDAO {
      */
     public boolean deleteSong(int id);
 
+    /**
+     * Gets all songs in a playlist by the playlist name
+     * @param name The name of the playlist to get songs from
+     * @return A list of {@link Song} objects from the playlist
+     */
+    List<Song> getSongsInPlaylistByPlaylistName(String name);
+
 }

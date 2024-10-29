@@ -205,4 +205,48 @@ public class SongDAOImpl extends Dao implements SongDAO{
         return false;
     }
 
+    @Override
+    public List<Song> getSongsInPlaylistByPlaylistName(String name) {
+        List<Song> result = new ArrayList<>();
+        String query = """
+                SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount, s.averageRating, s.ratingsSum
+                FROM Songs s
+                JOIN PlaylistSongs ps ON s.songID = ps.songID
+                JOIN Playlists p ON ps.playlistID = p.playlistID
+                WHERE p.name = ?;
+                """;
+
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, name);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Song s = Song.builder()
+                            .songID(rs.getInt("songID"))
+                            .title(rs.getString("title"))
+                            .albumID(rs.getInt("albumID"))
+                            .artistID(rs.getInt("artistID"))
+                            .length(rs.getTime("length").toLocalTime())
+                            .ratingCount(rs.getInt("ratingCount"))
+                            .averageRating(rs.getDouble("averageRating"))
+                            .ratingsSum(rs.getInt("ratingsSum"))
+                            .build();
+
+                    result.add(s);
+                }
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getSongsInPlaylistByPlaylistName() method: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Exception occurred in the getSongsInPlaylistByPlaylistName() method: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }

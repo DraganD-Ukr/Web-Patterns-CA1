@@ -1,7 +1,6 @@
 package daos;
 
 import Business.Playlist;
-import Business.Song;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -46,7 +45,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
                             generatedId = rs.getInt(1);
                         }
                     }
-                };
+                }
 
             } catch (SQLException e) {
                 System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
@@ -179,57 +178,6 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         return playlists;
     }
 
-    @Override
-    public List<Song> getSongsInPlaylistByID(int playlistId) {
-
-        Song s;
-        List<Song> result = new ArrayList<>();
-
-        String query = """
-                    SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount, s.averageRating, s.ratingsSum
-                    FROM Songs s
-                    JOIN PlaylistSongs ps ON s.songID = ps.songID
-                    WHERE ps.playlistID = ?;
-                    """;
-
-        try(Connection con = super.getConnection();
-            PreparedStatement ps = con.prepareStatement(query)
-        ) {
-
-            ps.setInt(1, playlistId);
-
-            try(ResultSet rs = ps.executeQuery()) {
-
-                while (rs.next()) {
-
-                    s = Song.builder()
-                            .songID(rs.getInt("songID"))
-                            .title(rs.getString("title"))
-                            .albumID(rs.getInt("albumID"))
-                            .artistID(rs.getInt("artistID"))
-                            .length(rs.getTime("length").toLocalTime())
-                            .ratingCount(rs.getInt("ratingCount"))
-                            .averageRating(rs.getDouble("averageRating"))
-                            .ratingsSum(rs.getInt("ratingsSum"))
-                            .build();
-
-                    result.add(s);
-                }
-
-            } catch (SQLException e) {
-                System.out.println("Exception occurred in the getSongsInPlaylistByID() method: " + e.getMessage());
-                e.printStackTrace();
-            }
-
-
-
-        } catch (SQLException e) {
-            System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 
     @Override
     public Playlist getPlaylistByID(int playlistId) {
