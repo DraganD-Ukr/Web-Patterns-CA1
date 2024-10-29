@@ -21,4 +21,6 @@ public interface PlaylistDAO {
 
     Playlist getPlaylistByID(int playlistId);
 
+    Playlist getPlaylistByName(String playlistName);
+
 }
