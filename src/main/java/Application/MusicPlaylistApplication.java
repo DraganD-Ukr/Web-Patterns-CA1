@@ -251,10 +251,10 @@ public class MusicPlaylistApplication {
                 createPlaylist();
                 break;
             case 2:
-//                editPlaylist();
+                editPlaylist();
                 break;
             case 3:
-//                viewPlaylists();
+                viewPlaylists();
                 break;
             default:
                 System.out.println("Invalid choice.");
@@ -275,78 +275,89 @@ public class MusicPlaylistApplication {
         }
     }
 
-//    private static void editPlaylist() {
-//        String playlistName = validateInput("Enter playlist name to edit: ", ".*", "");
-//        Playlist playlist = playlistDAO.getPlaylistByName(playlistName, currentUser.getUserID());
-//        if (playlist == null) {
-//            System.out.println("Playlist not found or you do not have permission to edit it.");
-//            return;
-//        }
-//        System.out.println("\nEdit Playlist Menu:");
-//        System.out.println("1 Add a song");
-//        System.out.println("2 Remove a song");
-//        System.out.println("3 Rename playlist");
-//        System.out.print("Enter your choice: ");
-//        int choice = getMenuChoice();
-//        switch (choice) {
-//            case 1:
-//                addSongToPlaylist(playlist);
-//                break;
-//            case 2:
-//                removeSongFromPlaylist(playlist);
-//                break;
-//            case 3:
-//                renamePlaylist(playlist);
-//                break;
-//            default:
-//                System.out.println("Invalid choice.");
-//        }
-//    }
+    private static void editPlaylist() {
 
-//    private static void addSongToPlaylist(Playlist playlist) {
-//        String songTitle = validateInput("Enter song title to add: ", ".*", "");
-//        Song song = songDAO.getSongByTitle(songTitle);
-//        if (song != null) {
-//            if (playlistDAO.addSongToPlaylist(playlist.getPlaylistID(), song.getSongID())) {
-//                System.out.println("Song added to playlist.");
-//            } else {
-//                System.out.println("Failed to add song to playlist.");
-//            }
-//        } else {
-//            System.out.println("Song not found.");
-//        }
-//    }
+        String playlistName = validateInput("Enter playlist name to edit: ", ".*", "");
+        Playlist playlist = playlistDAO.getPlaylistByName(playlistName);
 
-//    private static void removeSongFromPlaylist(Playlist playlist) {
-//        String songTitle = validateInput("Enter song title to remove: ", ".*", "");
-//        Song song = songDAO.getSongByTitle(songTitle);
-//        if (song != null) {
-//            if (playlistDAO.removeSongFromPlaylist(playlist.getPlaylistID(), song.getSongID())) {
-//                System.out.println("Song removed from playlist.");
-//            } else {
-//                System.out.println("Failed to remove song from playlist.");
-//            }
-//        } else {
-//            System.out.println("Song not found.");
-//        }
-//    }
+        if (playlist == null) {
+            System.out.println("Playlist not found or you do not have permission to edit it.");
+            return;
+        }
 
-//    private static void renamePlaylist(Playlist playlist) {
-//        String newName = validateInput("Enter new playlist name: ", ".*", "");
-//        playlist.setName(newName);
-//        if (playlistDAO.updatePlaylist(playlist)) {
-//            System.out.println("Playlist renamed successfully.");
-//        } else {
-//            System.out.println("Failed to rename playlist.");
-//        }
-//    }
+        authorize(currentUser.getUserID(), playlist.getUserId());
 
-//    private static void viewPlaylists() {
-//        List<Playlist> playlists = playlistDAO.getAllPlaylists(currentUser.getUserID());
-//        for (Playlist playlist : playlists) {
-//            System.out.println(playlist);
-//        }
-//    }
+
+
+        System.out.println("\nEdit Playlist Menu:");
+        System.out.println("1 Add a song");
+        System.out.println("2 Remove a song");
+        System.out.println("3 Rename playlist");
+        System.out.print("Enter your choice: ");
+        int choice = getMenuChoice();
+        switch (choice) {
+            case 1:
+                addSongToPlaylist(playlist);
+                break;
+            case 2:
+                removeSongFromPlaylist(playlist);
+                break;
+            case 3:
+                renamePlaylist(playlist);
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void addSongToPlaylist(Playlist playlist) {
+
+        String songTitle = validateInput("Enter song title to add: ", ".*", "");
+        Song song = songDAO.findSongByTitle(songTitle);
+
+        if (song != null) {
+            if (playlistDAO.addSongToPlaylist(playlist.getPlaylistId(), song.getSongID())) {
+                System.out.println("Song added to playlist.");
+            } else {
+                System.out.println("Failed to add song to playlist.");
+            }
+        } else {
+            System.out.println("Song not found.");
+        }
+    }
+
+    private static void removeSongFromPlaylist(Playlist playlist) {
+
+        String songTitle = validateInput("Enter song title to remove: ", ".*", "");
+        Song song = songDAO.findSongByTitle(songTitle);
+
+        if (song != null) {
+            if (playlistDAO.removeSongFromPlaylist(playlist.getPlaylistId(), song.getSongID())) {
+                System.out.println("Song removed from playlist.");
+            } else {
+                System.out.println("Failed to remove song from playlist.");
+            }
+        } else {
+            System.out.println("Song not found.");
+        }
+    }
+
+    private static void renamePlaylist(Playlist playlist) {
+        String newName = validateInput("Enter new playlist name: ", ".*", "");
+        playlist.setName(newName);
+        if (playlistDAO.renamePlaylist(playlist.getPlaylistId(), newName)) {
+            System.out.println("Playlist renamed successfully.");
+        } else {
+            System.out.println("Failed to rename playlist.");
+        }
+    }
+
+    private static void viewPlaylists() {
+        List<Playlist> playlists = playlistDAO.getPlaylists(currentUser.getUserID());
+        for (Playlist playlist : playlists) {
+            System.out.println(playlist);
+        }
+    }
 
     private static void manageRatings() {
         System.out.println("\nManage Ratings Menu:");
@@ -420,5 +431,14 @@ public class MusicPlaylistApplication {
     private static void logout() {
         currentUser = null;
         System.out.println("Logged out successfully.");
+    }
+
+
+
+    private static void authorize(int currentUserId, int sourceUserID) {
+        if (currentUser == null || currentUserId != sourceUserID) {
+            System.out.println("You are not authorized to perform this action.");
+        }
+
     }
 }
