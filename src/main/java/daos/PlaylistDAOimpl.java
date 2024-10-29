@@ -22,6 +22,22 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
         super(databaseName);
     }
 
+    public void startTransaction(){
+        try {
+            super.getConnection().setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rollbackTransaction(){
+        try {
+            super.getConnection().rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean createPlaylist(Playlist playlist) {
 
