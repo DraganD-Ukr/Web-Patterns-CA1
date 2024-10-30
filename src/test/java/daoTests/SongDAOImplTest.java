@@ -22,7 +22,7 @@ class SongDAOImplTest {
 
     private static SongDAOImpl testSongDao;
     private static Song testSongToaddToDatabase, testSongToDeleteFromDatabase;
-    private static List<Song> testSongListInAlbums , testSongListByArtists;
+    private static List<Song> testSongListInAlbums , testSongListByArtists, testSongListInPlaylist;
     private static Song testSong;
 
     @BeforeAll
@@ -114,6 +114,41 @@ class SongDAOImplTest {
                         .ratingsSum(7)
                         .build()
         );
+
+        testSongListInPlaylist = List.of(
+                Song.builder()
+                        .songID(1)
+                        .title("Come Together")
+                        .albumID(1)
+                        .artistID(1)
+                        .length(LocalTime.of(0, 4, 20))
+                        .ratingCount(2)
+                        .averageRating(3.0)
+                        .ratingsSum(6)
+                        .build(),
+
+                Song.builder()
+                        .songID(2)
+                        .title("Let It Be")
+                        .albumID(1)
+                        .artistID(1)
+                        .length(LocalTime.of(0, 3, 50))
+                        .ratingCount(2)
+                        .averageRating(3.5)
+                        .ratingsSum(7)
+                        .build(),
+
+                Song.builder()
+                        .songID(3)
+                        .title("Stairway to Heaven")
+                        .albumID(2)
+                        .artistID(2)
+                        .length(LocalTime.of(0, 8, 2))
+                        .ratingCount(2)
+                        .averageRating(4.5)
+                        .ratingsSum(9)
+                        .build()
+        );
     }
 
     // Clean up the database after the tests
@@ -164,6 +199,36 @@ class SongDAOImplTest {
         List<Song> foundSongs = testSongDao.findSongsFromAlbumById(albumId);
 
         assertTrue(foundSongs.isEmpty());
+    }
+
+    @Test
+    void findSongsInPlaylistByPlaylistName_playlistFoundInDatabase() {
+        String playlistName = "Top Hits";
+
+        List<Song> foundSongs = testSongDao.getSongsInPlaylistByPlaylistName(playlistName);
+
+        for (Song song : foundSongs) {
+            System.out.println(song);
+        }
+
+        for (Song song : testSongListInPlaylist) {
+            System.out.println(song);
+        }
+
+        assertEquals(testSongListInPlaylist, foundSongs);
+
+
+    }
+
+    @Test
+    void findSongsInPlaylistByPlaylistName_playlistNotFoundInDatabase() {
+        String playlistName = "Invalid Name";
+
+        List<Song> foundSongs = testSongDao.getSongsInPlaylistByPlaylistName(playlistName);
+
+        assertTrue(foundSongs.isEmpty());
+
+
     }
 
     // Test if the songs are found in the database from that album by name
@@ -254,5 +319,7 @@ class SongDAOImplTest {
 
         assertFalse(songDeleted);
     }
+
+
 
 }
