@@ -11,9 +11,9 @@ import java.util.List;
 
 public class AlbumDaoImpl extends Dao implements AlbumDAO{
 
-        public AlbumDaoImpl(String dbName) {
-            super(dbName);
-        }
+    public AlbumDaoImpl(String dbName) {
+        super(dbName);
+    }
 
 
 
@@ -148,6 +148,40 @@ public class AlbumDaoImpl extends Dao implements AlbumDAO{
         }
 
         return result;
+    }
+
+    @Override
+    public Album getAlbumById(int albumId) {
+
+        Album album = null;
+
+        String query = "SELECT * FROM Albums WHERE albumID = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+        ) {
+            ps.setInt(1, albumId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+                    album = Album.builder()
+
+                            .albumId(rs.getInt("artistId"))
+                            .title(rs.getString("title"))
+                            .artistId(rs.getInt("artistId"))
+                            .releaseDate(rs.getDate("releaseDate"))
+                            .build();
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Exception occurred in the getArtistById() method: " + e.getMessage());
+        }
+        return album;
     }
 
 }
