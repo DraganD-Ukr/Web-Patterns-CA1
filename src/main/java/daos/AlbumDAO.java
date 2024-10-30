@@ -27,4 +27,11 @@ public interface AlbumDAO {
      */
     List<Album> getAllAlbumsByArtistName(String artistName);
 
+    /**
+     * Retrieve album by id.
+     * @param albumId - the id of the album to retrieve.
+     * @return - the album with the given id.
+     */
+    Album getAlbumById(int albumId);
+
 }
