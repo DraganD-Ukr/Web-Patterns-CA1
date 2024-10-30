@@ -183,6 +183,24 @@ class SongDAOImplTest {
         assertEquals(testSong, foundSong);
     }
 
+    @Test
+    void findSongById_songFoundInDatabase() {
+        int songId = 1;
+
+        Song foundSong = testSongDao.findSongById(songId);
+
+        assertEquals(testSong, foundSong);
+    }
+
+    @Test
+    void findSongById_songNotFoundInDatabase() {
+        int songId = -1;
+
+        Song foundSong = testSongDao.findSongById(songId);
+
+        assertNull(foundSong);
+    }
+
     // Test if the song is --not-- found in the database by the title and return null
     @Test
     void findSongByTitle_songNotFoundInDatabase() {
