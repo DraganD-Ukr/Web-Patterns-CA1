@@ -77,6 +77,7 @@ class SongDAOImplTest {
                         .averageRating(3.0)
                         .ratingsSum(6)
                         .build(),
+
                 Song.builder()
                         .songID(2)
                         .title("Let It Be")
@@ -147,6 +148,17 @@ class SongDAOImplTest {
                         .ratingCount(2)
                         .averageRating(4.5)
                         .ratingsSum(9)
+                        .build(),
+
+                Song.builder()
+                        .songID(5)
+                        .title("Blank Space")
+                        .albumID(3)
+                        .artistID(3)
+                        .length(LocalTime.of(0, 3, 51))
+                        .ratingCount(1)
+                        .averageRating(4)
+                        .ratingsSum(4)
                         .build()
         );
     }
@@ -349,9 +361,9 @@ class SongDAOImplTest {
                 .albumID(3)
                 .artistID(3)
                 .length(LocalTime.of(0, 3, 51))
-                .ratingCount(2)
-                .averageRating(3.5)
-                .ratingsSum(7)
+                .ratingCount(1)
+                .averageRating(4)
+                .ratingsSum(4)
                 .build(), mostPopularSong);
     }
 
