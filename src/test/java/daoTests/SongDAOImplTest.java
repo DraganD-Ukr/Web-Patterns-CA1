@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 class SongDAOImplTest {
-    private static SongDAO testSongDao;
+    private static SongDAOImpl testSongDao;
     private static Song testSongToaddToDatabase, testSongToDeleteFromDatabase;
     private static List<Song> testSongListInAlbums , testSongListByArtists;
     private static Song testSong;
