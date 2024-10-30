@@ -19,10 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 class SongDAOImplTest {
+
     private static SongDAOImpl testSongDao;
     private static Song testSongToaddToDatabase, testSongToDeleteFromDatabase;
     private static List<Song> testSongListInAlbums , testSongListByArtists;
     private static Song testSong;
+
     @BeforeAll
     public static void setup() {
         testSongDao = new SongDAOImpl("CA1_test");
@@ -46,7 +48,7 @@ class SongDAOImplTest {
                 .artistID(2)
                 .length(LocalTime.of(0, 3, 20))
                 .ratingCount(0)
-                .averageRating(0.0)
+                .averageRating(0)
                 .ratingsSum(0)
                 .build();
 

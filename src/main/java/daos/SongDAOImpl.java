@@ -207,6 +207,7 @@ public class SongDAOImpl extends Dao implements SongDAO{
 
     @Override
     public List<Song> getSongsInPlaylistByPlaylistName(String name) {
+
         List<Song> result = new ArrayList<>();
         String query = """
                 SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount, s.averageRating, s.ratingsSum
