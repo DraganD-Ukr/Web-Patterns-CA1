@@ -51,13 +51,6 @@ public class RatingDaoimplTest {
                         .songID(4)
                         .ratingValue(5)
                         .build());
-        ratingsToTestFromUser.add(
-                Rating.builder()
-                        .ratingID(5)
-                        .userID(1)
-                        .songID(5)
-                        .ratingValue(3)
-                        .build());
 
         ratingsBySongID = new ArrayList<>();
 
@@ -71,7 +64,7 @@ public class RatingDaoimplTest {
 
         ratingsBySongID.add(
                 Rating.builder()
-                        .ratingID(7)
+                        .ratingID(6)
                         .userID(2)
                         .songID(2)
                         .ratingValue(4)
@@ -260,7 +253,7 @@ public class RatingDaoimplTest {
         Rating existingRating = ratingDao.getRatingByUserIDandSongID(2, 2);
 
         assertNotNull(existingRating);
-        assertEquals(7, existingRating.getRatingID());
+        assertEquals(6, existingRating.getRatingID());
         assertEquals(2, existingRating.getUserID());
         assertEquals(2, existingRating.getSongID());
         assertEquals(4, existingRating.getRatingValue());

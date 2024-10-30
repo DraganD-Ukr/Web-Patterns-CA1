@@ -26,14 +26,14 @@ VALUES
 -- Insert data into Songs table
 INSERT INTO Songs (title, artistID, albumID, length)
 VALUES
-    ('Come Together', 1, 1, '00:04:20'), --  (The Beatles)
+    ('Come Together', 1, 1, '00:04:20'),
     ('Let It Be', 1, 1, '00:03:50'),
-    ('Stairway to Heaven', 2, 2, '00:08:02'), -- (Led Zeppelin)
+    ('Stairway to Heaven', 2, 2, '00:08:02'),
     ('Whole Lotta Love', 2, 2, '00:05:34'),
-    ('Blank Space', 3, 3, '00:03:51'), -- (Taylor Swift)
-    ('Formation', 4, 4, '00:03:26'), --  (Beyoncé)
+    ('Blank Space', 3, 3, '00:03:51'),
+    ('Formation', 4, 4, '00:03:26'),
     ('Halo', 4, 4, '00:03:44'),
-    ('Lose Yourself', 5, 5, '00:05:26'), --  (Eminem)
+    ('Lose Yourself', 5, 5, '00:05:26'),
     ('Without Me', 5, 5, '00:04:00');
 
 
@@ -43,15 +43,15 @@ VALUES
 -- Insert data into ArtistsSongs (Junction) table
 INSERT INTO ArtistsSongs (artistID, songID)
 VALUES
-    (1, 1), -- The Beatles - Come Together
-    (1, 2), -- The Beatles - Let It Be
-    (2, 3), -- Led Zeppelin - Stairway to Heaven
-    (2, 4), -- Led Zeppelin - Whole Lotta Love
-    (3, 5), -- Taylor Swift - Blank Space
-    (4, 6), -- Beyoncé - Formation
-    (4, 7), -- Beyoncé - Halo
-    (5, 8), -- Eminem - Lose Yourself
-    (5, 9); -- Eminem - Without Me
+    (1, 1),
+    (1, 2),
+    (2, 3),
+    (2, 4),
+    (3, 5),
+    (4, 6),
+    (4, 7),
+    (5, 8),
+    (5, 9);
 
 
 -- Insert data into Playlists table
@@ -62,26 +62,26 @@ VALUES
 
 -- Insert data into PlaylistSongs(Junction Table) table
 INSERT INTO PlaylistSongs (playlistID, songID) VALUES
-       (1, 1), -- Top Hits - Come Together
-       (1, 2), -- Top Hits - Stairway to Heaven
-       (1, 3), -- Top Hits - Blank Space
-       (2, 4), -- Chill Out - Formation
-       (2, 5); -- Chill Out - Lose Yourself
+       (1, 1),
+       (1, 2),
+       (1, 5),
+       (1, 3),
+       (2, 4),
+       (2, 5);
 
 
 
 -- Insert data into Ratings table
 INSERT INTO Ratings (userID, songID, ratingValue) VALUES
-      (1, 1, 4),  -- User 1 rates Stairway to Heaven
-      (1, 2, 3),  -- User 2 rates Blank Space
-      (1, 3, 4),  -- User 3 rates Formation
-      (1, 4, 5),  -- User 4 rates Lose Yourself
-      (1, 5, 3), -- User 1 rates God's Plan
-      (2, 1, 2), -- User 1 rates Diamonds
-      (2, 2, 4),  -- User 2 rates Without Me
-      (2, 3, 5),  -- User 3 rates Lose Yourself
-      (2, 4, 3), -- User 4 rates Hotline Bling
-      (2, 5, 4); -- User 1 rates thank u, next
+      (1, 1, 4),
+      (1, 2, 3),
+      (1, 3, 4),
+      (1, 4, 5),
+      (2, 1, 2),
+      (2, 2, 4),
+      (2, 3, 5),
+      (2, 4, 3),
+      (2, 5, 4);
 
 
 
