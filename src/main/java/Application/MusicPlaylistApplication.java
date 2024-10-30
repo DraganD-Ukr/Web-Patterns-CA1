@@ -220,7 +220,7 @@ public class MusicPlaylistApplication {
                     viewSongsInAlbum();
                     break;
                 case 4:
-                    searchSongByTitle();
+                    searchSongByTitleArtistAlbums();
                     break;
                 case 5:
                     exit = true;
@@ -260,7 +260,7 @@ public class MusicPlaylistApplication {
         GraphicsDisplay.DisplaySongs(songs, artistDAO, albumDAO);
     }
 
-    private static void searchSongByTitle() {
+    private static void searchSongByTitleArtistAlbums() {
 
         String songTitle = validateInput("Enter search query (title/artist/album): ", ".*", "");
         Song song = songDAO.findSongByTitle(songTitle);

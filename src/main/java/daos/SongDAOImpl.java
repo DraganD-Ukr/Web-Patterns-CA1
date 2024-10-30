@@ -93,6 +93,39 @@ public class SongDAOImpl extends Dao implements SongDAO{
     }
 
     @Override
+    public List<Song> getAllSongsByTitle(String title) {
+        List<Song> songList = new ArrayList<>();
+        Connection con = super.getConnection();
+        String sql = "SELECT songID, title, albumID, artistID, length, ratingCount, averageRating, ratingsSum " +
+                "FROM Songs WHERE title LIKE ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + title + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    songList.add(new Song(
+                            rs.getInt("songID"),
+                            rs.getString("title"),
+                            rs.getInt("albumID"),
+                            rs.getInt("artistID"),
+                            rs.getTime("length").toLocalTime(),
+                            rs.getInt("ratingCount"),
+                            rs.getDouble("averageRating"),
+                            rs.getInt("ratingsSum")
+                    ));
+                }
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while getting the song list by title.");
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing the SQL statement.");
+            e.printStackTrace();
+        }
+        return songList;
+    }
+
+    @Override
     public List<Song> findSongsFromArtist(String artistName) {
         List<Song> songList = new ArrayList<Song>();
 
@@ -118,14 +151,12 @@ public class SongDAOImpl extends Dao implements SongDAO{
                     ));
                 }
             }catch(SQLException e){
-                System.out.println(LocalDateTime.now() + ": An SQLException  occurred while running the query" +
-                        " or processing the result.");
+                System.out.println(LocalDateTime.now() + ": An SQLException  occurred while running the query or processing the result.");
                 System.out.println("Error: " + e.getMessage());
                 e.printStackTrace();
             }
         }catch(SQLException e){
-            System.out.println(LocalDateTime.now() + ": An SQLException  occurred while preparing the SQL " +
-                    "statement.");
+            System.out.println(LocalDateTime.now() + ": An SQLException  occurred while preparing the SQL statement.");
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }

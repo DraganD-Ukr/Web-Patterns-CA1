@@ -201,6 +201,15 @@ class SongDAOImplTest {
         assertNull(foundSong);
     }
 
+    @Test
+    void getAllSongsByTitle_songFoundInDatabase() {
+        String songToTest = "Come Together";
+
+        List<Song> foundSongs = testSongDao.getAllSongsByTitle(songToTest);
+
+        assertEquals(List.of(testSong), foundSongs);
+    }
+
     // Test if the song is --not-- found in the database by the title and return null
     @Test
     void findSongByTitle_songNotFoundInDatabase() {
@@ -236,14 +245,6 @@ class SongDAOImplTest {
         String playlistName = "Top Hits";
 
         List<Song> foundSongs = testSongDao.getSongsInPlaylistByPlaylistName(playlistName);
-
-        for (Song song : foundSongs) {
-            System.out.println(song);
-        }
-
-        for (Song song : testSongListInPlaylist) {
-            System.out.println(song);
-        }
 
         assertEquals(testSongListInPlaylist, foundSongs);
 
