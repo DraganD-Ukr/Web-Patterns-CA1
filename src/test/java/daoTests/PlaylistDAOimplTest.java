@@ -7,6 +7,11 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Test class for the PlaylistDAOimpl class
+ * @Author: Aloysius Wilfred Pacheco D00253302
+ **/
+
 import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PlaylistDAOimplTest {
@@ -74,7 +79,6 @@ class PlaylistDAOimplTest {
     void createPlaylist_success() {
         //creates playlist
         testPlaylist.setPlaylistId(testPlaylistDao.createPlaylist(testPlaylist));
-        System.out.println(testPlaylist.getPlaylistId());
 
         //make sure the playlist is created
         assertTrue(testPlaylist.getPlaylistId() > 0);
@@ -84,8 +88,7 @@ class PlaylistDAOimplTest {
     @Test
     @Order(2)
     void AddSongToPlaylistEntity_success(){
-        //add a song to the playlist test
-        System.out.println("yo12"+testPlaylist.getPlaylistId());
+        //add a song to the playlist tes
         assertTrue(testPlaylistDao.addSongToPlaylist(testPlaylist.getPlaylistId(), 1));
 
 
@@ -94,7 +97,6 @@ class PlaylistDAOimplTest {
     @Order(3)
     void removeSongFromPlaylist_success(){
         //remove the song from the playlist
-        System.out.println("yo12"+testPlaylist.getPlaylistId());
         assertTrue(testPlaylistDao.removeSongFromPlaylist(testPlaylist.getPlaylistId(), 1));
     }
 
