@@ -18,8 +18,8 @@ import javax.xml.crypto.Data;
  */
 public class MusicPlaylistApplication {
     //Database selection toggle
-    private static final String DATABASE_NAME = "CA1_test";
-    //private static final String DATABASE_NAME = "CA1";
+    //private static final String DATABASE_NAME = "CA1_test";
+    private static final String DATABASE_NAME = "CA1";
     private static final Scanner scanner = new Scanner(System.in);
     private static final UserDAOimpl userDAO = new UserDAOimpl(DATABASE_NAME);
     private static final ArtistDaoImpl artistDAO = new ArtistDaoImpl(DATABASE_NAME);
@@ -518,10 +518,11 @@ public class MusicPlaylistApplication {
 
         if (song != null) {
             Rating ratingObj = new Rating(currentUser.getUserID(), song.getSongID(), rating);
-            if (ratingDAO.addRating(ratingObj)) {
+
+            if (ratingDAO.getRatingByUserIDandSongID(song.getSongID(), currentUser.getUserID())==null &&ratingDAO.addRating(ratingObj)) {
                 System.out.println("Song rated successfully.");
             } else {
-                System.out.println("Failed to rate song.");
+                System.out.println("Failed to rate song,There may already be a rating present.");
             }
         } else {
             System.out.println("Song not found.");

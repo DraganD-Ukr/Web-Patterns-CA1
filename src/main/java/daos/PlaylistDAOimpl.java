@@ -28,11 +28,12 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
             int generatedId = -1;
 
-            Connection con = super.getConnection();
+
 
             String query = "INSERT INTO Playlists (userID, name, isPublic) VALUES (?, ?, ?)";
 
-            try (PreparedStatement ps = con.prepareStatement(query)) {
+            try (Connection con = super.getConnection();
+                 PreparedStatement ps = con.prepareStatement(query)) {
                 ps.setInt(1, playlist.getUserId());
                 ps.setString(2, playlist.getName());
                 ps.setBoolean(3, playlist.isPublic());
@@ -58,14 +59,12 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
 
     @Override
     public boolean deletePlaylistByID(int playlistId) {
-        Connection con = null;
-        PreparedStatement ps = null;
 
         String query = "DELETE FROM Playlists WHERE playlistID = ?";
 
-        try {
-            con = super.getConnection();
-            ps = con.prepareStatement(query);
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)){
+
             ps.setInt(1, playlistId);
 
             int rowsAffected = ps.executeUpdate();
