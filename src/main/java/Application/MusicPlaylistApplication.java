@@ -7,14 +7,19 @@ import Utils.Encryption;
 import daos.*;
 import Business.*;
 
+import javax.xml.crypto.Data;
+
 public class MusicPlaylistApplication {
+    //Database selection toggle
+    private static final String DATABASE_NAME = "CA1_test";
+    //private static final String DATABASE_NAME = "CA1";
     private static final Scanner scanner = new Scanner(System.in);
-    private static final UserDAO userDAO = new UserDAOimpl("CA1_test");
-    private static final ArtistDAO artistDAO = new ArtistDaoImpl("CA1_test");
-    private static final AlbumDAO albumDAO = new AlbumDaoImpl("CA1_test");
-    private static final SongDAO songDAO = new SongDAOImpl("CA1_test");
-    private static final PlaylistDAO playlistDAO = new PlaylistDAOimpl("CA1_test");
-    private static final RatingDao ratingDAO = new RatingDaoimpl("CA1_test");
+    private static final UserDAO userDAO = new UserDAOimpl(DATABASE_NAME);
+    private static final ArtistDAO artistDAO = new ArtistDaoImpl(DATABASE_NAME);
+    private static final AlbumDAO albumDAO = new AlbumDaoImpl(DATABASE_NAME);
+    private static final SongDAO songDAO = new SongDAOImpl(DATABASE_NAME);
+    private static final PlaylistDAO playlistDAO = new PlaylistDAOimpl(DATABASE_NAME);
+    private static final RatingDao ratingDAO = new RatingDaoimpl(DATABASE_NAME);
     private static final Encryption encryption = new Encryption();
     private static User currentUser = null;
 
