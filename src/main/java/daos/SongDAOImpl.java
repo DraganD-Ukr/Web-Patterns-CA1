@@ -56,6 +56,43 @@ public class SongDAOImpl extends Dao implements SongDAO{
     }
 
     @Override
+    public Song findSongById(int id) {
+
+        Song song = null;
+
+
+        // SQL query to get the song by its title
+        String sql = "SELECT * FROM Songs WHERE songID = ?";
+
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    song = new Song(
+                            rs.getInt("songID"),
+                            rs.getString("title"),
+                            rs.getInt("albumID"),
+                            rs.getInt("artistID"),
+                            rs.getTime("length").toLocalTime(),
+                            rs.getInt("ratingCount"),
+                            rs.getDouble("averageRating"),
+                            rs.getInt("ratingsSum")
+                    );
+                }
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while processing the result.");
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing Connection and SQL statement.");
+            e.printStackTrace();
+        }
+        return song;
+    }
+
+    @Override
     public List<Song> findSongsFromArtist(String artistName) {
         List<Song> songList = new ArrayList<Song>();
 
@@ -207,6 +244,7 @@ public class SongDAOImpl extends Dao implements SongDAO{
 
     @Override
     public List<Song> getSongsInPlaylistByPlaylistName(String name) {
+
         List<Song> result = new ArrayList<>();
         String query = """
                 SELECT s.songID, s.title, s.albumID, s.artistID, s.length, s.ratingCount, s.averageRating, s.ratingsSum

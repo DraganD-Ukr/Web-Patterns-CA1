@@ -1,5 +1,6 @@
 package daos;
 
+import Business.Playlist;
 import Business.User;
 
 import java.sql.Connection;
@@ -190,5 +191,41 @@ public class UserDAOimpl extends Dao implements UserDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public User getUserById(int userId) {
+
+        User user = null;
+        String query = "SELECT * FROM Users WHERE userID = ?";
+
+        try (Connection con = super.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+                    user = User.builder()
+                            .firstName(rs.getString("firstName"))
+                            .lastName(rs.getString("lastName"))
+                            .userName(rs.getString("userName"))
+                            .password(rs.getString("password"))
+                            .userID(rs.getInt("userID"))
+                            .build();
+                }
+
+            } catch (SQLException e) {
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while getting the playlist.");
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while preparing the SQL query");
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }

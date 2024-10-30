@@ -16,6 +16,13 @@ public interface SongDAO {
      * @return The {@link Song} object if found, otherwise {@code null}
      */
     public Song findSongByTitle(String title);
+
+    /**
+     * Gets song by its id
+     * @param id The id of the song to find
+     * @return The {@link Song} object if found, otherwise {@code null}
+     */
+    public Song findSongById(int id);
     /**
      * Gets all songs from a specific artist using name
      * @param artist The name of the artist to find songs from

@@ -19,10 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 class SongDAOImplTest {
+
     private static SongDAOImpl testSongDao;
     private static Song testSongToaddToDatabase, testSongToDeleteFromDatabase;
-    private static List<Song> testSongListInAlbums , testSongListByArtists;
+    private static List<Song> testSongListInAlbums , testSongListByArtists, testSongListInPlaylist;
     private static Song testSong;
+
     @BeforeAll
     public static void setup() {
         testSongDao = new SongDAOImpl("CA1_test");
@@ -46,7 +48,7 @@ class SongDAOImplTest {
                 .artistID(2)
                 .length(LocalTime.of(0, 3, 20))
                 .ratingCount(0)
-                .averageRating(0.0)
+                .averageRating(0)
                 .ratingsSum(0)
                 .build();
 
@@ -75,6 +77,7 @@ class SongDAOImplTest {
                         .averageRating(3.0)
                         .ratingsSum(6)
                         .build(),
+
                 Song.builder()
                         .songID(2)
                         .title("Let It Be")
@@ -112,6 +115,52 @@ class SongDAOImplTest {
                         .ratingsSum(7)
                         .build()
         );
+
+        testSongListInPlaylist = List.of(
+                Song.builder()
+                        .songID(1)
+                        .title("Come Together")
+                        .albumID(1)
+                        .artistID(1)
+                        .length(LocalTime.of(0, 4, 20))
+                        .ratingCount(2)
+                        .averageRating(3.0)
+                        .ratingsSum(6)
+                        .build(),
+
+                Song.builder()
+                        .songID(2)
+                        .title("Let It Be")
+                        .albumID(1)
+                        .artistID(1)
+                        .length(LocalTime.of(0, 3, 50))
+                        .ratingCount(2)
+                        .averageRating(3.5)
+                        .ratingsSum(7)
+                        .build(),
+
+                Song.builder()
+                        .songID(3)
+                        .title("Stairway to Heaven")
+                        .albumID(2)
+                        .artistID(2)
+                        .length(LocalTime.of(0, 8, 2))
+                        .ratingCount(2)
+                        .averageRating(4.5)
+                        .ratingsSum(9)
+                        .build(),
+
+                Song.builder()
+                        .songID(5)
+                        .title("Blank Space")
+                        .albumID(3)
+                        .artistID(3)
+                        .length(LocalTime.of(0, 3, 51))
+                        .ratingCount(1)
+                        .averageRating(4)
+                        .ratingsSum(4)
+                        .build()
+        );
     }
 
     // Clean up the database after the tests
@@ -132,6 +181,24 @@ class SongDAOImplTest {
         Song foundSong = testSongDao.findSongByTitle(songToTest);
 
         assertEquals(testSong, foundSong);
+    }
+
+    @Test
+    void findSongById_songFoundInDatabase() {
+        int songId = 1;
+
+        Song foundSong = testSongDao.findSongById(songId);
+
+        assertEquals(testSong, foundSong);
+    }
+
+    @Test
+    void findSongById_songNotFoundInDatabase() {
+        int songId = -1;
+
+        Song foundSong = testSongDao.findSongById(songId);
+
+        assertNull(foundSong);
     }
 
     // Test if the song is --not-- found in the database by the title and return null
@@ -162,6 +229,36 @@ class SongDAOImplTest {
         List<Song> foundSongs = testSongDao.findSongsFromAlbumById(albumId);
 
         assertTrue(foundSongs.isEmpty());
+    }
+
+    @Test
+    void findSongsInPlaylistByPlaylistName_playlistFoundInDatabase() {
+        String playlistName = "Top Hits";
+
+        List<Song> foundSongs = testSongDao.getSongsInPlaylistByPlaylistName(playlistName);
+
+        for (Song song : foundSongs) {
+            System.out.println(song);
+        }
+
+        for (Song song : testSongListInPlaylist) {
+            System.out.println(song);
+        }
+
+        assertEquals(testSongListInPlaylist, foundSongs);
+
+
+    }
+
+    @Test
+    void findSongsInPlaylistByPlaylistName_playlistNotFoundInDatabase() {
+        String playlistName = "Invalid Name";
+
+        List<Song> foundSongs = testSongDao.getSongsInPlaylistByPlaylistName(playlistName);
+
+        assertTrue(foundSongs.isEmpty());
+
+
     }
 
     // Test if the songs are found in the database from that album by name
@@ -252,5 +349,41 @@ class SongDAOImplTest {
 
         assertFalse(songDeleted);
     }
+
+
+    @Test
+    void findTopRatedSongSuccess(){
+        Song topRatedSong = testSongDao.getTopRatedSong();
+
+        assertEquals(Song.builder()
+                .songID(3)
+                .title("Stairway to Heaven")
+                .albumID(2)
+                .artistID(2)
+                .length(LocalTime.of(0, 8, 2))
+                .ratingCount(2)
+                .averageRating(4.5)
+                .ratingsSum(9)
+                .build(), topRatedSong);
+    }
+
+    @Test
+    void getMostPopularSong(){
+        Song mostPopularSong = testSongDao.getMostPopularSong();
+
+        System.out.println(mostPopularSong);
+
+        assertEquals(Song.builder()
+                .songID(5)
+                .title("Blank Space")
+                .albumID(3)
+                .artistID(3)
+                .length(LocalTime.of(0, 3, 51))
+                .ratingCount(1)
+                .averageRating(4)
+                .ratingsSum(4)
+                .build(), mostPopularSong);
+    }
+
 
 }

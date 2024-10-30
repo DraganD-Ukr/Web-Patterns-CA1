@@ -85,17 +85,26 @@ CREATE TABLE ArtistsSongs (
 
 -- Trigger for updating ratings
 DELIMITER //
+
 CREATE TRIGGER after_rating_insert
     AFTER INSERT ON Ratings
     FOR EACH ROW
 BEGIN
+    -- Update the ratingCount and ratingsSum first
     UPDATE Songs
     SET
         ratingCount = ratingCount + 1,
-        ratingsSum = ratingsSum + NEW.ratingValue,
+        ratingsSum = ratingsSum + NEW.ratingValue
+    WHERE
+        songID = NEW.songID;
+
+    -- Update the averageRating based on the updated ratingCount and ratingsSum
+    UPDATE Songs
+    SET
         averageRating = ratingsSum / ratingCount
     WHERE
         songID = NEW.songID;
 END; //
+
 DELIMITER ;
 
