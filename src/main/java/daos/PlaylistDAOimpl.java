@@ -40,6 +40,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0){
                     try (Statement statement = con.createStatement()) {
+                        //get the id of the last inserted row
                         ResultSet rs = statement.executeQuery("SELECT LAST_INSERT_ID()");
                         if (rs.next()) {
                             generatedId = rs.getInt(1);
@@ -48,7 +49,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
                 }
 
             } catch (SQLException e) {
-                System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while Creating.");
                 e.printStackTrace();
             }
 
@@ -71,7 +72,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.out.println(LocalDateTime.now() + ": SQLException occurred while adding the song.");
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while Deleting the Playlist.");
             e.printStackTrace();
         }
 
@@ -136,7 +137,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            System.out.println(LocalDateTime.now() + ": SQLException occurred while renaming the song.");
+            System.out.println(LocalDateTime.now() + ": SQLException occurred while renaming the playlist.");
             e.printStackTrace();
             return false;
         }
@@ -148,7 +149,6 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
     public List<Playlist> getPlaylists(int userId) {
 
         List<Playlist> playlists = new ArrayList<>();
-
 
         String querry = "SELECT * FROM Playlists WHERE userID = ? OR isPublic = 1";
 
@@ -167,7 +167,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
                             .build());
                 }
             } catch (SQLException e) {
-                System.out.println(LocalDateTime.now() + ": SQLException occurred while running the query.");
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while getting the playlists.");
                 e.printStackTrace();
             }
         } catch (SQLException e) {
@@ -199,7 +199,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
                             .build();
                 }
             } catch (SQLException e) {
-                System.out.println(LocalDateTime.now() + ": SQLException occurred while running the query.");
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while getting the playlist.");
                 e.printStackTrace();
             }
         } catch (SQLException e) {
@@ -230,7 +230,7 @@ public class PlaylistDAOimpl extends Dao implements PlaylistDAO {
                             .build();
                 }
             } catch (SQLException e) {
-                System.out.println(LocalDateTime.now() + ": SQLException occurred while running the query.");
+                System.out.println(LocalDateTime.now() + ": SQLException occurred while getting the playlist.");
                 e.printStackTrace();
             }
         } catch (SQLException e) {
