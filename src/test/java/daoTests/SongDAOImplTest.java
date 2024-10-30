@@ -321,5 +321,21 @@ class SongDAOImplTest {
     }
 
 
+    @Test
+    void findTopRatedSongSuccess(){
+        Song topRatedSong = testSongDao.getTopRatedSong();
+
+        assertEquals(Song.builder()
+                .songID(3)
+                .title("Stairway to Heaven")
+                .albumID(2)
+                .artistID(2)
+                .length(LocalTime.of(0, 8, 2))
+                .ratingCount(2)
+                .averageRating(4.5)
+                .ratingsSum(9)
+                .build(), topRatedSong);
+    }
+
 
 }
