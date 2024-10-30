@@ -101,9 +101,7 @@ public class MusicPlaylistApplication {
             System.out.println("Invalid input please enter a number.");
             scanner.next();
         }
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        return choice;
+         return Integer.parseInt(scanner.nextLine());
     }
 
     public static void register() {
@@ -477,7 +475,7 @@ public class MusicPlaylistApplication {
 
     private static void manageRatings() {
 
-        int choice = getMenuChoice();
+
         boolean exit = false;
         while (!exit) {
             System.out.println("\nManage Ratings Menu:");
@@ -487,6 +485,7 @@ public class MusicPlaylistApplication {
             System.out.println("4 Get most popular song");
             System.out.println("5 Exit");
             System.out.print("Enter your choice: ");
+            int choice = getMenuChoice();
             switch (choice) {
                 case 1:
                     rateSong();
