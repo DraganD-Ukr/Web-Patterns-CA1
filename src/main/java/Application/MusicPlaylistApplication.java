@@ -203,25 +203,32 @@ public class MusicPlaylistApplication {
         System.out.println("2 View all albums for an artist");
         System.out.println("3 View all songs in an album");
         System.out.println("4 Search for songs");
+        System.out.println("5 Exit");
         System.out.print("Enter your choice: ");
 
         int choice = getMenuChoice();
-
-        switch (choice) {
-            case 1:
-                viewAllArtists();
-                break;
-            case 2:
-                viewAlbumsForArtist();
-                break;
-            case 3:
-                viewSongsInAlbum();
-                break;
-            case 4:
-                searchSongByTitle();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+        boolean exit = false;
+        while(!exit){
+            switch (choice) {
+                case 1:
+                    viewAllArtists();
+                    break;
+                case 2:
+                    viewAlbumsForArtist();
+                    break;
+                case 3:
+                    viewSongsInAlbum();
+                    break;
+                case 4:
+                    searchSongByTitle();
+                    break;
+                case 5:
+                    exit = true;
+                    System.out.println("Exited");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
 
     }
@@ -268,23 +275,49 @@ public class MusicPlaylistApplication {
         System.out.println("1 Create a playlist");
         System.out.println("2 Edit a playlist");
         System.out.println("3 View playlists");
+        System.out.println("4 View songs in a playlist");
+        System.out.println("5 Exit");
         System.out.print("Enter your choice: ");
 
+        boolean exit = false;
         int choice = getMenuChoice();
-        switch (choice) {
-            case 1:
-                createPlaylist();
-                break;
-            case 2:
-                editPlaylist();
-                break;
-            case 3:
-                viewPlaylists();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+        while (!exit) {
+            switch (choice) {
+                case 1:
+                    createPlaylist();
+                    break;
+                case 2:
+                    editPlaylist();
+                    break;
+                case 3:
+                    viewPlaylists();
+                    break;
+                case 4:
+                    viewSongsInPlaylist();
+                    break;
+                case 5:
+                    System.out.println("Exited");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
 
+    }
+
+    private static void viewSongsInPlaylist() {
+        String playlistName = validateInput("Enter playlist name: ", ".*", "");
+        Playlist playlist = playlistDAO.getPlaylistByName(playlistName);
+
+        if (playlist == null || !authorize(currentUser.getUserID(), playlist.getUserId())) {
+            System.out.println("Playlist not found or you do not have permission to view it.");
+            return;
+        }
+
+        List<Song> songs = songDAO.getSongsInPlaylistByPlaylistName(playlistName);
+
+        GraphicsDisplay.DisplaySongs(songs, artistDAO, albumDAO);
     }
 
     private static void createPlaylist() {
@@ -306,12 +339,10 @@ public class MusicPlaylistApplication {
         String playlistName = validateInput("Enter playlist name to edit: ", ".*", "");
         Playlist playlist = playlistDAO.getPlaylistByName(playlistName);
 
-        if (playlist == null) {
+        if (playlist == null || !authorize(currentUser.getUserID(), playlist.getUserId())) {
             System.out.println("Playlist not found or you do not have permission to edit it.");
             return;
         }
-
-        authorize(currentUser.getUserID(), playlist.getUserId());
 
 
 
@@ -319,21 +350,30 @@ public class MusicPlaylistApplication {
         System.out.println("1 Add a song");
         System.out.println("2 Remove a song");
         System.out.println("3 Rename playlist");
+        System.out.println("4 Exit");
         System.out.print("Enter your choice: ");
         int choice = getMenuChoice();
-        switch (choice) {
-            case 1:
-                addSongToPlaylist(playlist);
-                break;
-            case 2:
-                removeSongFromPlaylist(playlist);
-                break;
-            case 3:
-                renamePlaylist(playlist);
-                break;
-            default:
-                System.out.println("Invalid choice.");
+        boolean exit = false;
+        while (!exit) {
+            switch (choice) {
+                case 1:
+                    addSongToPlaylist(playlist);
+                    break;
+                case 2:
+                    removeSongFromPlaylist(playlist);
+                    break;
+                case 3:
+                    renamePlaylist(playlist);
+                    break;
+                case 4:
+                    System.out.println("Exited");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
+
     }
 
     private static void addSongToPlaylist(Playlist playlist) {
@@ -396,26 +436,33 @@ public class MusicPlaylistApplication {
         System.out.println("2 View rated songs");
         System.out.println("3 Get top-rated song");
         System.out.println("4 Get most popular song");
+        System.out.println("5 Exit");
         System.out.print("Enter your choice: ");
 
         int choice = getMenuChoice();
-        switch (choice) {
-            case 1:
-                rateSong();
-                break;
-            case 2:
-                viewRatedSongs();
-                break;
-            case 3:
-                getTopRatedSong();
-                break;
-            case 4:
-                getMostPopularSong();
-                break;
-            default:
-                System.out.println("Invalid choice.");
+        boolean exit = false;
+        while (!exit) {
+            switch (choice) {
+                case 1:
+                    rateSong();
+                    break;
+                case 2:
+                    viewRatedSongs();
+                    break;
+                case 3:
+                    getTopRatedSong();
+                    break;
+                case 4:
+                    getMostPopularSong();
+                    break;
+                case 5:
+                    System.out.println("Exited");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }
-
     }
 
     private static void rateSong() {
@@ -486,9 +533,11 @@ public class MusicPlaylistApplication {
 
 
 
-    private static void authorize(int currentUserId, int sourceUserID) {
+    private static boolean authorize(int currentUserId, int sourceUserID) {
         if (currentUser == null || currentUserId != sourceUserID) {
-            System.out.println("You are not authorized to perform this action.");
+            return false;
+        }else{
+            return true;
         }
 
     }
