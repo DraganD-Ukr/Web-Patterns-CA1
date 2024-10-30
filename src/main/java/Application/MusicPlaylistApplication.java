@@ -4,22 +4,29 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import Utils.Encryption;
+import Utils.GraphicsDisplay;
 import daos.*;
 import Business.*;
 
 import javax.xml.crypto.Data;
-
+/**
+ * The main class of the application.
+ * @version 1.0
+ * @author Aloysius Wilfred Pacheco
+ * @author Dmytro Drahan
+ * @author JoArt Mahilaga
+ */
 public class MusicPlaylistApplication {
     //Database selection toggle
     private static final String DATABASE_NAME = "CA1_test";
     //private static final String DATABASE_NAME = "CA1";
     private static final Scanner scanner = new Scanner(System.in);
-    private static final UserDAO userDAO = new UserDAOimpl(DATABASE_NAME);
-    private static final ArtistDAO artistDAO = new ArtistDaoImpl(DATABASE_NAME);
-    private static final AlbumDAO albumDAO = new AlbumDaoImpl(DATABASE_NAME);
-    private static final SongDAO songDAO = new SongDAOImpl(DATABASE_NAME);
-    private static final PlaylistDAO playlistDAO = new PlaylistDAOimpl(DATABASE_NAME);
-    private static final RatingDao ratingDAO = new RatingDaoimpl(DATABASE_NAME);
+    private static final UserDAOimpl userDAO = new UserDAOimpl(DATABASE_NAME);
+    private static final ArtistDaoImpl artistDAO = new ArtistDaoImpl(DATABASE_NAME);
+    private static final AlbumDaoImpl albumDAO = new AlbumDaoImpl(DATABASE_NAME);
+    private static final SongDAOImpl songDAO = new SongDAOImpl(DATABASE_NAME);
+    private static final PlaylistDAOimpl playlistDAO = new PlaylistDAOimpl(DATABASE_NAME);
+    private static final RatingDaoimpl ratingDAO = new RatingDaoimpl(DATABASE_NAME);
     private static final Encryption encryption = new Encryption();
     private static User currentUser = null;
 
@@ -223,9 +230,7 @@ public class MusicPlaylistApplication {
 
         List<Artist> artists = artistDAO.getAllArtists();
 
-        for (Artist artist : artists) {
-            System.out.println(artist);
-        }
+        GraphicsDisplay.DisplayArtists(artists);
 
     }
 
@@ -234,9 +239,8 @@ public class MusicPlaylistApplication {
         String artistName = validateInput("Enter artist name: ", ".*", "");
 
         List<Album> albums = albumDAO.getAllAlbumsWhereArtistNameLike(artistName);
-        for (Album album : albums) {
-            System.out.println(album);
-        }
+
+        GraphicsDisplay.DisplayAlbums(albums, artistDAO);
 
     }
 
@@ -245,17 +249,16 @@ public class MusicPlaylistApplication {
         String albumTitle = validateInput("Enter album title: ", ".*", "");
 
         List<Song> songs = songDAO.findSongsFromAlbumByName(albumTitle);
-        for (Song song : songs) {
-            System.out.println(song);
-        }
 
+        GraphicsDisplay.DisplaySongs(songs, artistDAO, albumDAO);
     }
 
     private static void searchSongByTitle() {
 
         String songTitle = validateInput("Enter search query (title/artist/album): ", ".*", "");
         Song song = songDAO.findSongByTitle(songTitle);
-        System.out.println(song);
+
+        GraphicsDisplay.DisplaySong(song, artistDAO, albumDAO);
 
     }
 
@@ -381,9 +384,8 @@ public class MusicPlaylistApplication {
     private static void viewPlaylists() {
 
         List<Playlist> playlists = playlistDAO.getPlaylists(currentUser.getUserID());
-        for (Playlist playlist : playlists) {
-            System.out.println(playlist);
-        }
+
+        GraphicsDisplay.DisplayPlaylists(playlists, userDAO);
 
     }
 
@@ -439,9 +441,8 @@ public class MusicPlaylistApplication {
     private static void viewRatedSongs() {
 
         List<Rating> ratings = ratingDAO.getRatingsByUserID(currentUser.getUserID());
-        for (Rating rating : ratings) {
-            System.out.println(rating);
-        }
+
+        GraphicsDisplay.DisplayRatings(ratings, songDAO);
 
     }
 
@@ -451,7 +452,8 @@ public class MusicPlaylistApplication {
         Song topRatedSong = songDAO.getTopRatedSong();
 
         if (topRatedSong != null) {
-            System.out.println("Top-rated song: " + topRatedSong);
+            System.out.println("Top-rated song");
+            GraphicsDisplay.DisplaySong(topRatedSong, artistDAO, albumDAO);
         } else {
             System.out.println("No ratings found.");
         }
@@ -464,7 +466,8 @@ public class MusicPlaylistApplication {
         Song mostPopularSong = songDAO.getMostPopularSong();
 
         if (mostPopularSong != null) {
-            System.out.println("Most popular song: " + mostPopularSong);
+            System.out.println("Most popular song");
+            GraphicsDisplay.DisplaySong(mostPopularSong, artistDAO, albumDAO);
         } else {
             System.out.println("No playlists found.");
         }
