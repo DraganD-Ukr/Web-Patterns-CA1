@@ -48,4 +48,12 @@ public interface UserDAO {
      * @return {@code true} if the username exists, otherwise {@code false}
      */
     boolean existsbyUserName(String userName);
+
+    /**
+     * Retrieves a user by his id
+     *
+     * @param id The id to search for
+     * @return The {@link User} object if found, otherwise {@code null}
+     */
+    User getUserById(int id);
 }
