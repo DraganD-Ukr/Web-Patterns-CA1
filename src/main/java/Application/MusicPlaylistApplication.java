@@ -198,15 +198,16 @@ public class MusicPlaylistApplication {
 
     private static void generalAccess() {
 
-        System.out.println("\nGeneral Access Menu:");
-        System.out.println("1 View all artists");
-        System.out.println("2 View all albums for an artist");
-        System.out.println("3 View all songs in an album");
-        System.out.println("4 Search for songs");
-        System.out.println("5 Exit");
+
 
         boolean exit = false;
         while(!exit){
+            System.out.println("\nGeneral Access Menu:");
+            System.out.println("1 View all artists");
+            System.out.println("2 View all albums for an artist");
+            System.out.println("3 View all songs in an album");
+            System.out.println("4 Search for songs");
+            System.out.println("5 Exit");
             System.out.print("Enter your choice: ");
             int choice = getMenuChoice();
             switch (choice) {
@@ -262,16 +263,16 @@ public class MusicPlaylistApplication {
 
     private static void searchSongByTitleArtistAlbums() {
 
-        System.out.println("\nSearch Menu:");
-        System.out.println("1 Search by song title");
-        System.out.println("2 Search by artist name");
-        System.out.println("3 Search by album title");
-        System.out.println("4 Exit");
+
 
 
         boolean exit = false;
         while (!exit) {
-
+            System.out.println("\nSearch Menu:");
+            System.out.println("1 Search by song title");
+            System.out.println("2 Search by artist name");
+            System.out.println("3 Search by album title");
+            System.out.println("4 Exit");
             System.out.print("Enter your choice: ");
             int choice = getMenuChoice();
 
@@ -314,17 +315,15 @@ public class MusicPlaylistApplication {
 
     private static void managePlaylists() {
 
-        System.out.println("\nManage Playlists Menu:");
-        System.out.println("1 Create a playlist");
-        System.out.println("2 Edit a playlist");
-        System.out.println("3 View playlists");
-        System.out.println("4 View songs in a playlist");
-        System.out.println("5 Exit");
-
-
         boolean exit = false;
 
         while (!exit) {
+            System.out.println("\nManage Playlists Menu:");
+            System.out.println("1 Create a playlist");
+            System.out.println("2 Edit a playlist");
+            System.out.println("3 View playlists");
+            System.out.println("4 View songs in a playlist");
+            System.out.println("5 Exit");
             System.out.print("Enter your choice: ");
             int choice = getMenuChoice();
             switch (choice) {
@@ -391,14 +390,15 @@ public class MusicPlaylistApplication {
 
 
 
-        System.out.println("\nEdit Playlist Menu:");
-        System.out.println("1 Add a song");
-        System.out.println("2 Remove a song");
-        System.out.println("3 Rename playlist");
-        System.out.println("4 Exit");
+
 
         boolean exit = false;
         while (!exit) {
+            System.out.println("\nEdit Playlist Menu:");
+            System.out.println("1 Add a song");
+            System.out.println("2 Remove a song");
+            System.out.println("3 Rename playlist");
+            System.out.println("4 Exit");
             System.out.print("Enter your choice: ");
             int choice = getMenuChoice();
             switch (choice) {
@@ -477,16 +477,14 @@ public class MusicPlaylistApplication {
 
     private static void manageRatings() {
 
-        System.out.println("\nManage Ratings Menu:");
-        System.out.println("1 Rate a song");
-        System.out.println("2 View rated songs");
-        System.out.println("3 Get top-rated song");
-        System.out.println("4 Get most popular song");
-
-
         int choice = getMenuChoice();
         boolean exit = false;
         while (!exit) {
+            System.out.println("\nManage Ratings Menu:");
+            System.out.println("1 Rate a song");
+            System.out.println("2 View rated songs");
+            System.out.println("3 Get top-rated song");
+            System.out.println("4 Get most popular song");
             System.out.println("5 Exit");
             System.out.print("Enter your choice: ");
             switch (choice) {

@@ -30,7 +30,7 @@ public class GraphicsDisplay {
             String artistName = Truncate(a.getName(), 30);
             System.out.println(
                     //format the output to be displayed in a table format
-                    String.format("| %-8d | %-30s |", a.getArtistId(), artistName)
+                    String.format("| %-8d | %-28s |", a.getArtistId(), artistName)
             );
         }
         System.out.println("+----------+------------------------------+");
@@ -59,7 +59,7 @@ public class GraphicsDisplay {
 
             System.out.println(
                     //format the output to be displayed in a table format
-                    String.format("| %-8d | %-30s | %-30s | %-30s |", a.getAlbumId(), albumTitle, artistName, a.getReleaseDate())
+                    String.format("| %-8d | %-28s | %-28s | %-28s |", a.getAlbumId(), albumTitle, artistName, a.getReleaseDate())
             );
         }
         System.out.println("+----------+------------------------------+------------------------------+------------------------------+");
@@ -86,7 +86,7 @@ public static void DisplaySongs(List<Song> songs, ArtistDaoImpl artistDao, Album
         int ratingCount = s.getRatingCount();
 
         System.out.println(
-                String.format("| %-7d | %-30s | %-8s | %-14s | %-12d | %-30s | %-30s |",
+                String.format("| %-7d | %-28s | %-8s | %-14s | %-12d | %-28s | %-28s |",
                         s.getSongID(), songTitle, length, avgRating, ratingCount, artistName, albumName)
         );
     }
@@ -106,7 +106,7 @@ public static void DisplaySongs(Song song, ArtistDaoImpl artistDao, AlbumDaoImpl
     int ratingCount = song.getRatingCount();
 
     System.out.println(
-            String.format("| %-7d | %-30s | %-8s | %-14s | %-12d | %-30s | %-30s |",
+            String.format("| %-7d | %-28s | %-8s | %-14s | %-12d | %-28s | %-28s |",
                     song.getSongID(), songTitle, length, avgRating, ratingCount, artistName, albumName)
     );
     System.out.println("+---------+------------------------------+----------+----------------+--------------+------------------------------+------------------------------+");
@@ -130,7 +130,7 @@ public static void DisplaySongs(Song song, ArtistDaoImpl artistDao, AlbumDaoImpl
         int ratingCount = song.getRatingCount();
 
         System.out.println(
-                String.format("| %-7d | %-30s | %-8s | %-14s | %-12d | %-30s | %-30s |",
+                String.format("| %-7d | %-28s | %-8s | %-14s | %-12d | %-28s | %-28s |",
                         song.getSongID(), songTitle, length, avgRating, ratingCount, artistName, albumName)
         );
         System.out.println("+---------+------------------------------+----------+----------------+--------------+------------------------------+------------------------------+");
@@ -154,7 +154,7 @@ public static void DisplaySongs(Song song, ArtistDaoImpl artistDao, AlbumDaoImpl
             String userName = Truncate(userDao.getUserById(p.getUserId()).getUserName(), 30);
             System.out.println(
                     //format the output to be displayed in a table format
-                    String.format("| %-12d | %-30s | %-16s |", p.getPlaylistId(), playlistName, userName)
+                    String.format("| %-12d | %-28s | %-16s |", p.getPlaylistId(), playlistName, userName)
             );
         }
         System.out.println("+--------------+------------------------------+------------------+");
@@ -176,7 +176,7 @@ public static void DisplaySongs(Song song, ArtistDaoImpl artistDao, AlbumDaoImpl
             String songName = Truncate(songDao.findSongById(r.getSongID()).getTitle(), 30);
             System.out.println(
                     //format the output to be displayed in a table format
-                    String.format("| %-12d | %-30s | %-16d | %-16.2f |", r.getRatingID(), songName, r.getRatingValue(), songDao.findSongById(r.getSongID()).getAverageRating())
+                    String.format("| %-12d | %-28s | %-16d | %-16.2f |", r.getRatingID(), songName, r.getRatingValue(), songDao.findSongById(r.getSongID()).getAverageRating())
             );
         }
         System.out.println("+--------------+------------------------------+------------------+------------------+");
