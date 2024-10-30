@@ -337,5 +337,23 @@ class SongDAOImplTest {
                 .build(), topRatedSong);
     }
 
+    @Test
+    void getMostPopularSong(){
+        Song mostPopularSong = testSongDao.getMostPopularSong();
+
+        System.out.println(mostPopularSong);
+
+        assertEquals(Song.builder()
+                .songID(5)
+                .title("Blank Space")
+                .albumID(3)
+                .artistID(3)
+                .length(LocalTime.of(0, 3, 51))
+                .ratingCount(2)
+                .averageRating(3.5)
+                .ratingsSum(7)
+                .build(), mostPopularSong);
+    }
+
 
 }
